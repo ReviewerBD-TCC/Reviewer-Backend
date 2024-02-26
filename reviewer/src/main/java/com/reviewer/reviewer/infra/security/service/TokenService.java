@@ -5,7 +5,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.reviewer.reviewer.models.User;
 import com.sun.source.tree.TryTree;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.sql.Struct;
@@ -18,6 +21,9 @@ public class TokenService {
 
     @Value("${api.security.token.secret}")
     private String secret;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public String generateToken(User user){
         try {
@@ -48,6 +54,13 @@ public class TokenService {
 
     private Instant dateExpire() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public String login(LoginDto data){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+        var auth = authenticationManager.authenticate(usernamePassword);
+
+        return this.generateToken((User) auth.getPrincipal());
     }
 
 }
