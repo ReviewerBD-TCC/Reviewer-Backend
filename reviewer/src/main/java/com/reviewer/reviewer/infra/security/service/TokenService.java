@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Struct;
@@ -61,6 +62,10 @@ public class TokenService {
         var auth = authenticationManager.authenticate(usernamePassword);
 
         return this.generateToken((User) auth.getPrincipal());
+    }
+
+    public User register(RegisterDto data){
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
     }
 
 }
