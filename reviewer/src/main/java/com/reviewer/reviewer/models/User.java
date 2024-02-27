@@ -28,6 +28,15 @@ public class User implements UserDetails {
     private String gkz;
     private String manager;
 
+    public User(RegisterDto data) {
+        this.name = data.name;
+        this.email = data.email;
+        this.password = data.password;
+        this.user = data.user;
+        this.type = data.type;
+        this.gkz = data.gkz;
+        this.manager = data.manager;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
