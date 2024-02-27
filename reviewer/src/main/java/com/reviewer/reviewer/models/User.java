@@ -1,5 +1,6 @@
 package com.reviewer.reviewer.models;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -66,4 +67,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+=======
+public class User {
+>>>>>>> keven
 }

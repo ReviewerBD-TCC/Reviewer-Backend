@@ -1,5 +1,6 @@
 package com.reviewer.reviewer.infra.security;
 
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,4 +46,10 @@ public class SecurityConfigurations {
         return new BCryptPasswordEncoder();
     }
 
+=======
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SecurityConfigurations {
+>>>>>>> keven
 }
