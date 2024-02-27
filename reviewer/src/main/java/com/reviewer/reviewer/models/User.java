@@ -1,6 +1,6 @@
 package com.reviewer.reviewer.models;
 
-<<<<<<< HEAD
+import com.reviewer.reviewer.dto.users.RegisterDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,8 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 public class User implements UserDetails {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
@@ -30,13 +31,13 @@ public class User implements UserDetails {
     private String manager;
 
     public User(RegisterDto data) {
-        this.name = data.name;
-        this.email = data.email;
-        this.password = data.password;
-        this.user = data.user;
-        this.type = data.type;
-        this.gkz = data.gkz;
-        this.manager = data.manager;
+        this.name = data.name();
+        this.email = data.email();
+        this.password = data.password();
+        this.user = data.user();
+        this.type = data.type();
+        this.gkz = data.gkz();
+        this.manager = data.manager();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class User implements UserDetails {
 
         String role = "ROLE_USER";
 
-        if ("admin".equals(getType())){
+        if ("admin".equals(getType())) {
             role = "ROLE_ADMIN";
         }
 
@@ -75,8 +76,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+
     }
-=======
-public class User {
->>>>>>> keven
 }
