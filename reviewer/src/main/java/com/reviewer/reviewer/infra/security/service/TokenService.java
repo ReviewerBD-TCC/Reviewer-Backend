@@ -3,6 +3,8 @@ package com.reviewer.reviewer.infra.security.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.reviewer.reviewer.dto.users.LoginDto;
+import com.reviewer.reviewer.dto.users.RegisterDto;
 import com.reviewer.reviewer.models.User;
 import com.reviewer.reviewer.repositories.UserRepository;
 import com.sun.source.tree.TryTree;
@@ -69,7 +71,7 @@ public class TokenService {
     }
 
     public User register(RegisterDto data){
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.passwordAdicionando construtor());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
         var user = new User(data);
         repository.save(user);
