@@ -28,15 +28,14 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (request.getRequestURI().equals("/auth/register") && request.getMethod().equals("POST")) {
             filterChain.doFilter(request, response);
-
             return;
         }
 
-        var tokenJWT = retriveToken(request);
+        var tokenJWT = retrieveToken(request);
 
         if (tokenJWT != null) {
             var subject = tokenService.getSubject(tokenJWT);
-            var user = repository.findByLogin(subject);
+            var user = repository.findByEmail(subject);
 
             var auhthentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
@@ -47,7 +46,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     }
 
-    private String retriveToken(HttpServletRequest request) {
+    private String retrieveToken(HttpServletRequest request) {
 
         var authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null){
