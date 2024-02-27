@@ -74,6 +74,7 @@ public class TokenService {
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
         var user = new User(data);
+        user.setPassword(encryptedPassword);
         repository.save(user);
 
         return user;
