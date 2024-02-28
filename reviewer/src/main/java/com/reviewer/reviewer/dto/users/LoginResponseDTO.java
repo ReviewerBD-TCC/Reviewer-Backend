@@ -1,4 +1,4 @@
 package com.reviewer.reviewer.dto.users;
 
-public record LoginResponseDTO(String token) {
+public record LoginResponseDto(String token) {
 }
