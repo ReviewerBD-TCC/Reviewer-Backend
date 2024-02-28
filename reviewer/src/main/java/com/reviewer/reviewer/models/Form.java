@@ -1,35 +1,25 @@
 package com.reviewer.reviewer.models;
 
-import com.reviewer.reviewer.dto.questions.QuestionDto;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity(name = "question")
-@Table(name = "questions")
+import java.time.LocalDateTime;
+
+@Table(name = "form")
+@Entity(name = "forms")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Question {
+public class Form {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String question;
-    private boolean active;
+    private LocalDateTime year;
+    private LocalDateTime validation;
 
-
-
-    public Question(QuestionDto data){
-        this.question = data.question();
-        active = data.active();
-    }
-    
 }
-

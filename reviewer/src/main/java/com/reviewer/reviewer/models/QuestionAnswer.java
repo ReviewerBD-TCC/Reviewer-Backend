@@ -1,20 +1,14 @@
-public package com.reviewer.reviewer.models;
+package com.reviewer.reviewer.models;
 
-import java.io.Serializable;
-
-import org.hibernate.mapping.Set;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity(name = "question_answer")
 @Table(name = "questions_answer")
@@ -22,15 +16,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionAnswer  implements Serializable{
-
+public class  QuestionAnswer{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "question_answer", fetch = FetchType.LAZY)
-    private Set<QuestionForm> questionForm;
+    @ManyToOne
+    @JoinColumn(name = "form_id")
+    @JsonIgnore
+    private QuestionForm questionForm;
     private String answer;
-    
+
+    public QuestionAnswer(QuestionAnswerDto data) {
+        this.answer = data.answer();
+        this.questionForm = data.questionFormId();
+        this.user = data.userId();
+    }
 }
 
