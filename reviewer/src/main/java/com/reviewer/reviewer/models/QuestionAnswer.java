@@ -1,8 +1,4 @@
-public package com.reviewer.reviewer.models;
-
-import java.io.Serializable;
-
-import org.hibernate.mapping.Set;
+package com.reviewer.reviewer.models;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -16,13 +12,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity(name = "question_answer")
 @Table(name = "questions_answer")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionAnswer  implements Serializable{
+public class  QuestionAnswer{
 
     private Long id;
     @OneToOne(cascade = CascadeType.DETACH)
