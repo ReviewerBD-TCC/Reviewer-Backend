@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Question implements Serializable {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
