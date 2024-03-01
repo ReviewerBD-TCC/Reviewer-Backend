@@ -6,6 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+<<<<<<< HEAD
+=======
+import org.springframework.transaction.reactive.GenericReactiveTransaction;
+
+import java.util.Set;
+>>>>>>> origin/keven
 
 @Entity(name = "question_form")
 @Table(name = "questions_form")
@@ -15,6 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class  QuestionForm{
 
+<<<<<<< HEAD
     private Long id;
     @OneToMany(mappedBy = "form_id", fetch = FetchType.LAZY)
     private Form form;
@@ -22,5 +29,19 @@ public class  QuestionForm{
     @JoinColumn(name = "question_answer_id")
     @JsonIgnore
     private QuestionAnswer questionAnswer;
+=======
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "form_id")
+    private Form form;
+
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    @JsonIgnore
+    private Question questions;
+>>>>>>> origin/keven
 
 }

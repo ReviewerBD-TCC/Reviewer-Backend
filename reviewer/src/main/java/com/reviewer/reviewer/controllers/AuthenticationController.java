@@ -2,9 +2,9 @@ package com.reviewer.reviewer.controllers;
 
 
 import com.reviewer.reviewer.dto.users.LoginDto;
-import com.reviewer.reviewer.dto.users.LoginResponseDTO;
+import com.reviewer.reviewer.dto.users.LoginResponseDto;
 import com.reviewer.reviewer.dto.users.RegisterDto;
-import com.reviewer.reviewer.dto.users.RegisterResponse;
+import com.reviewer.reviewer.dto.users.RegisterResponseDto;
 import com.reviewer.reviewer.infra.security.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,14 +26,14 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDto loginDto){
-        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(tokenService.login(loginDto)));
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginDto loginDto){
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDto(tokenService.login(loginDto)));
     }
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterDto registerDto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterDto registerDto, UriComponentsBuilder uriBuilder){
         var uri = uriBuilder.path("/register/{id}").buildAndExpand(registerDto.user()).toUri();
-        return ResponseEntity.created(uri).body(new RegisterResponse(tokenService.register(registerDto)));
+        return ResponseEntity.created(uri).body(new RegisterResponseDto(tokenService.register(registerDto)));
     }
 }
