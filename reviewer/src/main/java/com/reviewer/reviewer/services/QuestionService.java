@@ -3,6 +3,7 @@ package com.reviewer.reviewer.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.reviewer.reviewer.dto.questions.QuestionDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,14 @@ public class QuestionService {
     @Autowired
     private QuestionRepository repository;
 
-    public QuestionDto create(QuestionDto data){
+    public QuestionDetailsDto create(QuestionDto data){
         var question = new Question(data);
+
         repository.save(question);
-        return data;
+
+        return new QuestionDetailsDto(question);
     }
-    public QuestionDto update(Long id, QuestionDto data){
+    public QuestionDetailsDto update(Long id, QuestionDto data){
         var question = repository.findById(id);
         if(question.isEmpty()) throw new QuestionException("erro ao encontrar question");
         var entityQuestion = question.get();
@@ -30,22 +33,21 @@ public class QuestionService {
         entityQuestion.setActive(data.active());
         repository.save(entityQuestion);
 
-        return data;
+        return new QuestionDetailsDto(entityQuestion);
 
     }
-    public QuestionDto findById(Long id){
+    public QuestionDetailsDto findById(Long id){
         var question = repository.findById(id);
         if(question.isEmpty()) throw new QuestionException("erro ao encontrar question");
-        var questionConverted = new QuestionDto(question.get().getQuestion(), question.get().getActive());
 
-        return questionConverted;
+        return new QuestionDetailsDto(question.get());
 
     }
-    public List<QuestionDto> findAll(){
+    public List<QuestionDetailsDto> findAll(){
         var questions = repository.findAll();
-        List<QuestionDto> questionsDto = new ArrayList<>();
+        List<QuestionDetailsDto> questionsDto = new ArrayList<>();
         for (Question question : questions) {
-            var questionConverted = new QuestionDto(question.getQuestion(), question.getActive());
+            var questionConverted = new QuestionDetailsDto(question);
             questionsDto.add(questionConverted);
         }
         return questionsDto;
