@@ -28,7 +28,7 @@ public class Question {
 
     public Question(QuestionDto data){
         this.question = data.question();
-        this.active = data.active();
+        this.active = true;
     }
     
 }
