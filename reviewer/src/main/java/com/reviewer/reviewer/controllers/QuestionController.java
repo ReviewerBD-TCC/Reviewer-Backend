@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @SecurityRequirement(name = "bearer-key")
-@RequestMapping("question")
+@RequestMapping("/question")
 public class QuestionController {
 
     @Autowired
