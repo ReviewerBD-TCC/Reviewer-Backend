@@ -36,7 +36,7 @@ public class QuestionService {
     public QuestionDto findById(Long id){
         var question = repository.findById(id);
         if(question.isEmpty()) throw new QuestionException("erro ao encontrar question");
-        var questionConverted = new QuestionDto(question.get().getQuestion(), question.get().isActive());
+        var questionConverted = new QuestionDto(question.get().getQuestion(), question.get().getActive());
 
         return questionConverted;
 
@@ -45,7 +45,7 @@ public class QuestionService {
         var questions = repository.findAll();
         List<QuestionDto> questionsDto = new ArrayList<>();
         for (Question question : questions) {
-            var questionConverted = new QuestionDto(question.getQuestion(), question.isActive());
+            var questionConverted = new QuestionDto(question.getQuestion(), question.getActive());
             questionsDto.add(questionConverted);
         }
         return questionsDto;
