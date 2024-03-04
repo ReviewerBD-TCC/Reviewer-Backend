@@ -29,7 +29,8 @@ public class User implements UserDetails {
     private String type;
     private String gkz;
     private String manager;
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<QuestionAnswer> questionAnswers;
     public User(RegisterDto data) {
         this.name = data.name();
         this.email = data.email();
@@ -45,9 +46,9 @@ public class User implements UserDetails {
 
         String role = "ROLE_USER";
 
-        if ("admin".equals(getType())) {
-            role = "ROLE_ADMIN";
-        }
+       if ("admin".equals(getType())) {
+           role = "ROLE_ADMIN";
+       }
 
         return List.of(new SimpleGrantedAuthority(role));
 
@@ -78,4 +79,10 @@ public class User implements UserDetails {
         return true;
 
     }
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return password;
+	}
 }

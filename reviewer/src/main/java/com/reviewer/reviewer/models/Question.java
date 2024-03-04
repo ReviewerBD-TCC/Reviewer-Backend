@@ -1,5 +1,7 @@
 package com.reviewer.reviewer.models;
 
+
+
 import com.reviewer.reviewer.dto.questions.QuestionDto;
 
 import jakarta.persistence.*;
@@ -22,6 +24,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String question;
+    
     private boolean active;
 
 

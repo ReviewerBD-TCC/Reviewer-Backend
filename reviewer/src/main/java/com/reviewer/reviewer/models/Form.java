@@ -5,12 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Table(name = "form")
 @Entity(name = "forms")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -19,7 +24,11 @@ public class Form {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime year;
-    private LocalDateTime validation;
-
+  	@DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate year;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate validation;
+    @OneToMany(mappedBy = "question")
+    private List<Question> questions;
 }
