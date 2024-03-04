@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("answer_form")
+@RequestMapping("/answer_form")
 public class QuestionAnswerController {
     @Autowired
     private QuestionAnswerService service;
