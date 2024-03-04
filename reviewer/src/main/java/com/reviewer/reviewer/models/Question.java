@@ -22,13 +22,13 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String question;
-    private boolean active;
+    private Boolean active;
 
 
 
     public Question(QuestionDto data){
         this.question = data.question();
-        active = data.active();
+        this.active = data.active();
     }
     
 }
