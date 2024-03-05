@@ -30,10 +30,8 @@ public class  QuestionForm{
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    @JsonIgnore
     private Question question;
 
-    @OneToMany(mappedBy = "questionForm", cascade = CascadeType.ALL)
-    private List<QuestionFormAnswer> questionFormAnswers;
+
 
 }

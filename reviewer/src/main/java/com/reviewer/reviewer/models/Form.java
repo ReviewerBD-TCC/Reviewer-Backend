@@ -29,6 +29,6 @@ public class Form {
 	
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate validation;
-    @OneToMany(mappedBy = "question")
-    private List<Question> questions;
+    @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
+    private List<QuestionForm> questionForms;
 }

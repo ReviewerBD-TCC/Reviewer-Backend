@@ -25,12 +25,14 @@ public class  QuestionAnswer{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   @ManyToOne
-	@JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
 	private User user;
-    
-    @OneToMany(mappedBy = "questionAnswer", cascade = CascadeType.ALL)
-    private List<QuestionFormAnswer> questionFormAnswers;
+
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private QuestionForm questions;
+ 
     private String answer;
 
    
