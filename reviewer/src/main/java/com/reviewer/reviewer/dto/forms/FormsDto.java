@@ -1,9 +1,11 @@
 package com.reviewer.reviewer.dto.forms;
 
-<<<<<<< HEAD
-=======
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
->>>>>>> origin/keven
-public record FormsDto() {
+
+
+
+
+public record FormsDto(Long id, LocalDate year,  LocalDate validation) {
+
 }

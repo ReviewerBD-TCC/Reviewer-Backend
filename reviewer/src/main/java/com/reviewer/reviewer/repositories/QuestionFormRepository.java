@@ -1,13 +1,13 @@
 package com.reviewer.reviewer.repositories;
 
 import com.reviewer.reviewer.models.QuestionForm;
-import org.springframework.data.jpa.repository.JpaRepository;
-<<<<<<< HEAD
 
-=======
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
->>>>>>> origin/keven
 public interface QuestionFormRepository extends JpaRepository<QuestionForm, Long> {
+    List<QuestionForm> findAllByFormId(Long formId);
 }

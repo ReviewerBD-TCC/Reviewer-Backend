@@ -1,19 +1,65 @@
 package com.reviewer.reviewer.services;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.reviewer.reviewer.dto.forms.FormQuestionDto;
+import com.reviewer.reviewer.dto.forms.FormsDto;
+import com.reviewer.reviewer.models.Form;
 
 import com.reviewer.reviewer.models.QuestionForm;
 import com.reviewer.reviewer.repositories.FormRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
+import com.reviewer.reviewer.repositories.QuestionRepository;
 
 @Service
 public class FormService {
 
     @Autowired
-    private FormRepository FormRepository;
+    private FormRepository formRepository;
 
     @Autowired
     private QuestionFormRepository questionFormRepository;
+
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    public FormsDto create(){
+         var form = new Form();
+        form.setYear(LocalDate.now());
+        form.setValidation(LocalDate.now().plusYears(1));
+        var formCreated = formRepository.save(form);
+        System.out.println(formCreated);
+        return new FormsDto(formCreated.getId(),formCreated.getYear(),formCreated.getValidation());
+
+    }
+    public FormQuestionDto createFormQuestion(Long formId, Long questionId){
+
+        var form = formRepository.findById(formId);
+        if(form.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        var question = questionRepository.findById(questionId);
+        if(question.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        var questionForm = new QuestionForm(null, form.get(), question.get());
+        questionFormRepository.save(questionForm);
+
+        return new FormQuestionDto( form.get().getId(), question.get().getQuestion(), form.get().getYear());
+
+    }
+    public List<FormQuestionDto> listFormQuestion(Long formId) {
+		var questionForms = questionFormRepository.findAllByFormId(formId);
+		List<FormQuestionDto>questionsFormsDto = new ArrayList<>();
+        if(questionForms.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        for (QuestionForm questionForm : questionForms) {
+			var entity = new FormQuestionDto(questionForm.getForm().getId(), questionForm.getQuestion().getQuestion(), questionForm.getForm().getYear());
+			questionsFormsDto.add(entity);
+		}
+		return questionsFormsDto;	
+		}
     
 }

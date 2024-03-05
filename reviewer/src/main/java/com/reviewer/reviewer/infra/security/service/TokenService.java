@@ -7,7 +7,7 @@ import com.reviewer.reviewer.dto.users.LoginDto;
 import com.reviewer.reviewer.dto.users.RegisterDto;
 import com.reviewer.reviewer.models.User;
 import com.reviewer.reviewer.repositories.UserRepository;
-import com.sun.source.tree.TryTree;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Struct;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -66,7 +65,7 @@ public class TokenService {
     public String login(LoginDto data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
-
+        System.out.println(auth);
         return this.generateToken((User) auth.getPrincipal());
     }
 

@@ -7,9 +7,12 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+
 import io.swagger.v3.oas.models.info.License;
 
 @Configuration
+
 public class SpringDocConfigurations {
     @Bean
     public OpenAPI customOpenAPI() {
@@ -30,4 +33,5 @@ public class SpringDocConfigurations {
                                 .name("Apache 2.0")
                                 .url("http:/Reviewer/api/licenca")));
     }
+ 
 }

@@ -1,5 +1,9 @@
 package com.reviewer.reviewer.models;
 
+
+
+import java.util.List;
+
 import com.reviewer.reviewer.dto.questions.QuestionDto;
 
 import jakarta.persistence.*;
@@ -22,6 +26,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String question;
+    
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<QuestionForm> questionForms;
+    
     private boolean active;
 
 
