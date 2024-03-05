@@ -34,7 +34,6 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
     }
 
-
    @GetMapping("/{id}")
     public ResponseEntity<QuestionDetailsDto> findById(@PathVariable(name = "id") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
