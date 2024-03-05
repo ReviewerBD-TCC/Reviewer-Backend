@@ -29,8 +29,13 @@ public class User implements UserDetails {
     private String type;
     private String gkz;
     private String manager;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuestionAnswer> questionAnswers;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<FormIndication> formIndications;
+
     public User(RegisterDto data) {
         this.name = data.name();
         this.email = data.email();
