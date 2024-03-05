@@ -1,6 +1,10 @@
 package com.reviewer.reviewer.models;
 
+import java.util.List;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 
 
 import jakarta.persistence.*;
@@ -30,12 +34,6 @@ public class  QuestionAnswer{
     private QuestionForm questionForm;
  
     private String answer;
-
-    public QuestionAnswer(User user, QuestionForm questionForm, String answer){
-        this.user = user;
-        this.questionForm = questionForm;
-        this.answer = answer;
-    }
 
    
 }
