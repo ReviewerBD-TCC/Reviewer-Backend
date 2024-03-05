@@ -18,7 +18,7 @@ import com.reviewer.reviewer.services.FormService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("form")
+@RequestMapping("/form")
 @SecurityRequirement(name = "bearer-key")
 public class FormController {
 
@@ -35,7 +35,7 @@ public class FormController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createFormQuestion(formId, questionId));
 
     }
-       @GetMapping("/{formId}")
+    @GetMapping("/{formId}")
     public ResponseEntity<List<FormQuestionDto>> listFormQuestion(@PathVariable(name = "formId") Long formId){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.listFormQuestion(formId));
 
