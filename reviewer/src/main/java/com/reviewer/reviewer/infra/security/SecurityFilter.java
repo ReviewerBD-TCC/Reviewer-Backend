@@ -1,5 +1,4 @@
 package com.reviewer.reviewer.infra.security;
-
 import com.reviewer.reviewer.infra.security.service.TokenService;
 import com.reviewer.reviewer.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
