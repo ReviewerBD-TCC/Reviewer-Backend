@@ -3,14 +3,12 @@ package com.reviewer.reviewer.controllers;
 
 import com.reviewer.reviewer.dto.users.LoginDto;
 import com.reviewer.reviewer.dto.users.LoginResponseDTO;
-
 import com.reviewer.reviewer.dto.users.RegisterDto;
 import com.reviewer.reviewer.dto.users.RegisterResponseDto;
 import com.reviewer.reviewer.infra.security.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

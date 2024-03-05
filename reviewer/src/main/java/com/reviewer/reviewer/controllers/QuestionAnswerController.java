@@ -2,6 +2,7 @@ package com.reviewer.reviewer.controllers;
 
 
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
+import com.reviewer.reviewer.dto.questions.QuestionAnswerResponseDto;
 import com.reviewer.reviewer.services.QuestionAnswerService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,7 +23,7 @@ public class QuestionAnswerController {
     private QuestionAnswerService service;
 
     @PostMapping
-    public ResponseEntity<QuestionAnswerDto> create(@RequestBody @Valid QuestionAnswerDto data){
+    public ResponseEntity<QuestionAnswerResponseDto> create(@RequestBody @Valid QuestionAnswerDto data){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
     }
 
