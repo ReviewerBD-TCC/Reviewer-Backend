@@ -28,7 +28,7 @@ public class Question {
     private String question;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<QuestionForm> questionForms;
+    private List<FormQuestion> questionForms;
 
     private Boolean active;
 
