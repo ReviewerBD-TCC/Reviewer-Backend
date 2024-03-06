@@ -3,7 +3,7 @@ package com.reviewer.reviewer.infra.validation;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 import com.reviewer.reviewer.infra.exceptions.QuestionException;
 import com.reviewer.reviewer.infra.exceptions.UserException;
-import com.reviewer.reviewer.models.QuestionForm;
+import com.reviewer.reviewer.models.FormQuestion;
 import com.reviewer.reviewer.models.User;
 
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
@@ -17,10 +17,10 @@ public record Validation (QuestionAnswerDto data){
         if(user.isEmpty()) throw new UserException("user not found");
         return user.get();
     }
-    public QuestionForm FormQuestionNotFound(QuestionFormRepository repository){
-        var questionForm = repository.findById(data.questionFormId());
-        if(questionForm.isEmpty()) throw new QuestionException("Form question not found");
-        return questionForm.get();
+    public FormQuestion FormQuestionNotFound(QuestionFormRepository repository){
+        var formQuestion = repository.findById(data.questionFormId());
+        if(formQuestion.isEmpty()) throw new QuestionException("Form question not found");
+        return formQuestion.get();
     }
   
    
