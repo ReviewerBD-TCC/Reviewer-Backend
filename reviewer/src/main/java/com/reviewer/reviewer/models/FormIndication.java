@@ -1,5 +1,7 @@
 package com.reviewer.reviewer.models;
 
+import com.reviewer.reviewer.dto.forms.FormIndicationDto;
+import com.reviewer.reviewer.dto.forms.IndicatedUserDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,11 +19,12 @@ public class FormIndication {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "indicating_user_id")
+    private User indicatingUser;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
-    private User users;
+    @JoinColumn(name = "indicatedUsers_id")
+    private IndicatedUsers indicatedUsers;
+
 
 }
