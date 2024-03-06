@@ -9,13 +9,13 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity(name = "question_form")
-@Table(name = "questions_form")
+@Entity(name = "form_question")
+@Table(name = "form_questions")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class  QuestionForm{
+public class FormQuestion{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
