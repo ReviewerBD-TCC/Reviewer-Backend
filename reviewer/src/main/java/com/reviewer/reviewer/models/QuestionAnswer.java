@@ -21,7 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class  QuestionAnswer{
+public class QuestionAnswer{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +32,7 @@ public class  QuestionAnswer{
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private QuestionForm questionForm;
+    private FormQuestion formQuestion;
 
     private String answer;
 
