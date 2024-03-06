@@ -32,5 +32,5 @@ public class Form {
     private LocalDate validation;
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
-    private List<QuestionForm> questionForms;
+    private List<FormQuestion> formQuestions;
 }
