@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 
 @Table(name = "indicated_user")
@@ -20,12 +21,16 @@ public class IndicatedUsers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "formIndication_id", cascade = CascadeType.ALL)
-    private FormIndication formIndication;
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    private List<FormIndication> formIndication;
 
     @ManyToOne
     @JoinColumn(name = "userIndicated")
     private User userIndicated;
+
+    @ManyToOne
+    @JoinColumn(name = "id_formIndicated")
+    private FormIndication id_formIdicated;
 
     public IndicatedUsers(Long id, User user) {
         this.id = id;
