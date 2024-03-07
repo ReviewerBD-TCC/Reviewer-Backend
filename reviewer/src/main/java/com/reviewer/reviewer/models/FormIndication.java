@@ -26,5 +26,13 @@ public class FormIndication {
     @JoinColumn(name = "indicatedUsers_id")
     private IndicatedUsers indicatedUsers;
 
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+    private List<IndicatedUsers> fk_formIndication;
 
+
+    public FormIndication(Long id, User user, IndicatedUsers indicatedUsers) {
+        this.id = id;
+        this.indicatingUser = user;
+        this.indicatedUsers = indicatedUsers;
+    }
 }
