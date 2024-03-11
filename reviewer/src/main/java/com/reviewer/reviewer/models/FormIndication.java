@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Table(name = "form_indication")
 @Entity(name = "forms_indications")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -30,9 +32,14 @@ public class FormIndication {
     private List<IndicatedUsers> fk_formIndication;
 
 
-    public FormIndication(Long id, User user, IndicatedUsers indicatedUsers) {
+    public FormIndication(Long id, User user) {
         this.id = id;
         this.indicatingUser = user;
-        this.indicatedUsers = indicatedUsers;
+
+    }
+
+    public FormIndication(IndicatedUsers indication, User user) {
+        this.indicatingUser = user;
+        this.indicatedUsers = indication;
     }
 }
