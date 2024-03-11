@@ -4,10 +4,13 @@ import com.reviewer.reviewer.models.IndicatedUsers;
 import com.reviewer.reviewer.models.User;
 import jakarta.validation.Valid;
 
-public record FormIndicationDto(
+import java.util.List;
+
+public record
+FormIndicationDto(
         Long id,
         Long indicatingUser,
-        Long indicatedUsers
+        List<IndicatedUserDto> indicatedUsers
 ) {
 //    public FormIndicationDto(FormIndicationResponseDto formIndicated) {
 //        this(formIndicated.id(), formIndicated.indicatingUser(), formIndicated.indicatedUsers());
