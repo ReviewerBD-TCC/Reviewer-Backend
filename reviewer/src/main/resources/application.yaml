@@ -24,3 +24,19 @@ api:
     token:
       secret: ${JWT_SECRET:12345678}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:  "*"
+              
+      cors:
+        allowed-headers:
+        - "*"
+        allowed-origins:
+        - "*"
+        allowed-methods:
+        - "*"
+        allow-credentials: true
+
+

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "*")
     @Transactional
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDto loginDto){
         System.out.println(loginDto);
@@ -35,6 +37,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     @Transactional
+    @CrossOrigin(origins = "*")
     public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterDto registerDto, UriComponentsBuilder uriBuilder){
         var uri = uriBuilder.path("/register/{id}").buildAndExpand(registerDto.user()).toUri();
         return ResponseEntity.created(uri).body(new RegisterResponseDto(tokenService.register(registerDto)));
