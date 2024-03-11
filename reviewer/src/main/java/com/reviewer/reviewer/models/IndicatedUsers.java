@@ -1,19 +1,19 @@
 package com.reviewer.reviewer.models;
 
-import com.reviewer.reviewer.dto.forms.IndicatedUserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Table(name = "indicated_user")
 @Entity(name = "indicated_users")
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class IndicatedUsers {
 
@@ -33,7 +33,11 @@ public class IndicatedUsers {
     private FormIndication id_formIdicated;
 
     public IndicatedUsers(Long id, User user) {
-        this.id = id;
         this.userIndicated = user;
+    }
+
+    public IndicatedUsers(User user, FormIndication id) {
+        this.userIndicated = user;
+        this.formIndication = Collections.singletonList(id);
     }
 }
