@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.reviewer.reviewer.dto.forms.FormQuestionDto;
 import com.reviewer.reviewer.dto.forms.FormsDto;
 import com.reviewer.reviewer.models.Form;
-import com.reviewer.reviewer.models.Question;
 import com.reviewer.reviewer.models.QuestionForm;
 import com.reviewer.reviewer.repositories.FormRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
@@ -56,7 +55,7 @@ public class FormService {
 		List<FormQuestionDto>questionsFormsDto = new ArrayList<>();
         if(questionForms.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         for (QuestionForm questionForm : questionForms) {
-			var entity = new FormQuestionDto(questionForm.getForm().getId(), questionForm.getQuestion().getQuestion(), questionForm.getForm().getYear());
+			var entity = new FormQuestionDto(questionForm.getForm().getId(), questionForm.getQuestions().getQuestion(), questionForm.getForm().getYear());
 			questionsFormsDto.add(entity);
 		}
 		return questionsFormsDto;	

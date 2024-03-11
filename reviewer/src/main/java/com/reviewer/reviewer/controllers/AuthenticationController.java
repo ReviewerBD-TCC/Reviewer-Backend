@@ -2,8 +2,7 @@ package com.reviewer.reviewer.controllers;
 
 
 import com.reviewer.reviewer.dto.users.LoginDto;
-import com.reviewer.reviewer.dto.users.LoginResponseDTO;
-
+import com.reviewer.reviewer.dto.users.LoginResponseDto;
 import com.reviewer.reviewer.dto.users.RegisterDto;
 import com.reviewer.reviewer.dto.users.RegisterResponseDto;
 import com.reviewer.reviewer.infra.security.service.TokenService;
@@ -30,9 +29,9 @@ public class AuthenticationController {
     @PostMapping("/login")
     @CrossOrigin(origins = "*")
     @Transactional
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDto loginDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginDto loginDto){
         System.out.println(loginDto);
-        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(tokenService.login(loginDto)));
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDto(tokenService.login(loginDto)));
     }
 
     @PostMapping("/register")
