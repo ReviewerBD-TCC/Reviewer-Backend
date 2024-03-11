@@ -4,17 +4,16 @@ import com.reviewer.reviewer.dto.forms.FormIndicationDto;
 import com.reviewer.reviewer.dto.forms.FormIndicationResponseDto;
 import com.reviewer.reviewer.dto.forms.IndicatedUserDto;
 import com.reviewer.reviewer.dto.forms.IndicatedUserResponseDto;
-import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
-import com.reviewer.reviewer.dto.questions.QuestionAnswerResponseDto;
 import com.reviewer.reviewer.models.FormIndication;
 import com.reviewer.reviewer.models.IndicatedUsers;
 import com.reviewer.reviewer.repositories.FormIndicationRepository;
 import com.reviewer.reviewer.repositories.IndicatedUserRepository;
 import com.reviewer.reviewer.repositories.UserRepository;
+import com.reviewer.reviewer.services.FormIndicationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/form_indication")
@@ -40,22 +37,25 @@ public class FormIndicationController {
     @Autowired
     private IndicatedUserRepository indicatedUserRepository;
 
+    @Resource
+    private FormIndicationService formIndicationService;
+
     @PostMapping("/indication")
     @Transactional
     public ResponseEntity<FormIndicationResponseDto> create(@RequestBody @Valid FormIndicationDto dados, UriComponentsBuilder uriBuilder){
 
         var indicatingUser = userRepository.findById(dados.indicatingUser());
-        var indicatedUsers = indicatedUserRepository.findById(dados.indicatedUsers());
 
-        var indicated = new IndicatedUserDto(indicatedUsers.get());
-
-        var formIndicated = new FormIndication(dados.id(), indicatingUser.get(), indicatedUsers.get());
-
-        repository.save(formIndicated);
-
+//
+        var formIndicated = new FormIndication(dados.id(), indicatingUser.get());
+//
+//        repository.save(formIndicated);
+//
         var uri = uriBuilder.path("/form_indication/{id}").buildAndExpand(formIndicated.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new FormIndicationResponseDto(formIndicated, indicated));
+
+
+        return ResponseEntity.ok().body(formIndicationService.create(dados));
     }
 
     @PostMapping("/indicated_user")
