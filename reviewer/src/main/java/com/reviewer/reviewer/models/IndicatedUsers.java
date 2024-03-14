@@ -32,7 +32,7 @@ public class IndicatedUsers {
     @JoinColumn(name = "id_formIndicated")
     private FormIndication id_formIdicated;
 
-    public IndicatedUsers(Long id, User user) {
+    public IndicatedUsers(User user) {
         this.userIndicated = user;
     }
 

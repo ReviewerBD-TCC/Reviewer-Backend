@@ -1,9 +1,6 @@
 package com.reviewer.reviewer.controllers;
 
-import com.reviewer.reviewer.dto.forms.FormIndicationDto;
-import com.reviewer.reviewer.dto.forms.FormIndicationResponseDto;
-import com.reviewer.reviewer.dto.forms.IndicatedUserDto;
-import com.reviewer.reviewer.dto.forms.IndicatedUserResponseDto;
+import com.reviewer.reviewer.dto.forms.*;
 import com.reviewer.reviewer.models.FormIndication;
 import com.reviewer.reviewer.models.IndicatedUsers;
 import com.reviewer.reviewer.repositories.FormIndicationRepository;
@@ -42,36 +39,36 @@ public class FormIndicationController {
 
     @PostMapping("/indication")
     @Transactional
-    public ResponseEntity<FormIndicationResponseDto> create(@RequestBody @Valid FormIndicationDto dados, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<IndicandoResponseDto> create(@RequestBody @Valid IndicandoDto dados, UriComponentsBuilder uriBuilder){
 
-        var indicatingUser = userRepository.findById(dados.indicatingUser());
+        var usuarioIndicando = userRepository.findById(dados.indicando());
 
 //
-        var formIndicated = new FormIndication(dados.id(), indicatingUser.get());
+        var formulario = new FormIndication(dados.id(), usuarioIndicando.get());
 //
 //        repository.save(formIndicated);
 //
-        var uri = uriBuilder.path("/form_indication/{id}").buildAndExpand(formIndicated.getId()).toUri();
+        var uri = uriBuilder.path("/form_indication/{id}").buildAndExpand(formulario.getId()).toUri();
 
 
 
-        return ResponseEntity.ok().body(formIndicationService.create(dados));
+        return ResponseEntity.created(uri).body(formIndicationService.create(dados));
     }
 
-    @PostMapping("/indicated_user")
-    @Transactional
-    public ResponseEntity<IndicatedUserResponseDto> create(@RequestBody @Valid IndicatedUserDto dados, UriComponentsBuilder uriBuilder){
-
-        var user = userRepository.findById(dados.user_id());
-
-        var indicatedUser = new IndicatedUsers(dados.id(), user.get());
-
-        indicatedUserRepository.save(indicatedUser);
-
-        var uri = uriBuilder.path("/indicated_user/{id}").buildAndExpand(indicatedUser.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new IndicatedUserResponseDto(indicatedUser));
-    }
+//    @PostMapping("/indicated_user")
+//    @Transactional
+//    public ResponseEntity<IndicatedUserResponseDto> create(@RequestBody @Valid IndicatedUserDto dados, UriComponentsBuilder uriBuilder){
+//
+//        var user = userRepository.findById(dados.user_id());
+//
+//        var indicatedUser = new IndicatedUsers(dados.id(), user.get());
+//
+//        indicatedUserRepository.save(indicatedUser);
+//
+//        var uri = uriBuilder.path("/indicated_user/{id}").buildAndExpand(indicatedUser.getId()).toUri();
+//
+//        return ResponseEntity.created(uri).body(new IndicatedUserResponseDto(indicatedUser));
+//    }
 
 
 }

@@ -1,49 +1,49 @@
 package com.reviewer.reviewer.services;
 
-import com.reviewer.reviewer.dto.forms.FormIndicationDto;
-import com.reviewer.reviewer.dto.forms.FormIndicationResponseDto;
-import com.reviewer.reviewer.dto.forms.IndicatedUserDto;
+import com.reviewer.reviewer.dto.forms.*;
 import com.reviewer.reviewer.models.FormIndication;
+import com.reviewer.reviewer.models.Indicados;
+import com.reviewer.reviewer.models.Indicando;
 import com.reviewer.reviewer.models.IndicatedUsers;
-import com.reviewer.reviewer.repositories.FormIndicationRepository;
-import com.reviewer.reviewer.repositories.IndicatedUserRepository;
-import com.reviewer.reviewer.repositories.UserRepository;
+import com.reviewer.reviewer.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class FormIndicationService {
 
     @Autowired
-    private FormIndicationRepository repository;
+    private IndicandoRepository indicandoRepository;
 
     @Autowired
-    private IndicatedUserRepository indicatedUserRepository;
+    private IndicadosRepository indicadosRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    public FormIndicationResponseDto create(FormIndicationDto form){
+    public IndicandoResponseDto create(IndicandoDto form){
 
-        var user = userRepository.findById(form.indicatingUser());
+        var usuario = userRepository.findById(form.indicando());
+        List<Indicando> indicandos = new ArrayList<>();
 
-        var indication = new IndicatedUsers(form.indicatingUser(), user.get());
-        var listIndicated = form.indicatedUsers();
+        for (int i = 0; i < form.indicados().size(); i++) {
+            var indicado = new Indicados(usuario.get());
+            indicadosRepository.save(indicado);
 
-        // Primeiro, salve a entidade de indicação principal
-        var savedIndication = indicatedUserRepository.save(indication);
+            var indicando = new Indicando(usuario.get(), indicado);
+            indicandoRepository.save(indicando);
 
-        // Em seguida, salve os usuários indicados e associe-os à indicação principal
-        for(IndicatedUserDto indicated : listIndicated ) {
-            var findUser = userRepository.findById(indicated.user_id());
-            var indicatedUser = new IndicatedUsers(savedIndication.getId(), findUser.get());
-            indicatedUserRepository.save(indicatedUser);
+            indicandos.add(indicando);
         }
 
-        // Finalmente, crie a entidade de FormIndication com a indicação principal
-        var formIndicatedComplet = new FormIndication(savedIndication, user.get());
-        repository.save(formIndicatedComplet);
+        // Use o último Indicando da lista para criar o IndicandoResponseDto
+        Indicando ultimoIndicando = indicandos.get(indicandos.size() - 1);
+        IndicandoResponseDto responseDto = new IndicandoResponseDto(ultimoIndicando);
 
-        return new FormIndicationResponseDto(form);
+        return responseDto;
     }
+
+
 }
