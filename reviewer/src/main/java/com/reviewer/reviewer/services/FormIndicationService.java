@@ -9,6 +9,7 @@ import com.reviewer.reviewer.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,21 +27,27 @@ public class FormIndicationService {
     public IndicandoResponseDto create(IndicandoDto form){
 
         var usuario = userRepository.findById(form.indicando());
-        List<Indicando> indicandos = new ArrayList<>();
+        List<Indicados> indicados = new ArrayList<>();
+        List<Indicando> indicandoUser = new ArrayList<>();
 
         for (int i = 0; i < form.indicados().size(); i++) {
-            var indicado = new Indicados(usuario.get());
+            var usuarioIndicado = userRepository.findById(form.indicados().get(i).usuario());
+            var indicado = new Indicados(usuarioIndicado.get());
             indicadosRepository.save(indicado);
 
             var indicando = new Indicando(usuario.get(), indicado);
             indicandoRepository.save(indicando);
 
-            indicandos.add(indicando);
+            indicandoUser.add(indicando);
+
+            indicados.add(indicado);
         }
 
-        // Use o último Indicando da lista para criar o IndicandoResponseDto
-        Indicando ultimoIndicando = indicandos.get(indicandos.size() - 1);
-        IndicandoResponseDto responseDto = new IndicandoResponseDto(ultimoIndicando);
+        List<IndicadosResponseDto> indicadosResponseDtos = IndicadosResponseDto.fromIndicadosList(indicados);
+
+
+        Indicando ultimoIndicando = indicandoUser.get(indicandoUser.size() - 1);
+        IndicandoResponseDto responseDto = new IndicandoResponseDto(ultimoIndicando, usuario.get(), indicadosResponseDtos);
 
         return responseDto;
     }
