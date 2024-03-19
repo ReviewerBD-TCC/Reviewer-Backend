@@ -3,6 +3,7 @@ package com.reviewer.reviewer.services;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.reviewer.reviewer.models.FormQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +48,17 @@ public class FormService {
         var formQuestion = new FormQuestion(null, form.get(), question.get());
         questionFormRepository.save(formQuestion);
 
-        return new FormQuestionDto( form.get().getId(), question.get().getQuestion(), form.get().getYear());
+        return new FormQuestionDto(form.get().getId(), question.get().getQuestion(), form.get().getYear());
 
     }
     public List<FormQuestionDto> listFormQuestion(Long formId) {
 		var formQuestions = questionFormRepository.findAllByFormId(formId);
 		List<FormQuestionDto>formQuestionDtos = new ArrayList<>();
-        if(formQuestions.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+        if (formQuestions.isEmpty()) {
+            throw new NoSuchElementException("Id form: " + formId + " not found");
+        }
         for (FormQuestion formQuestion : formQuestions) {
-			var entity = new FormQuestionDto(formQuestion.getForm().getId(), formQuestion.getQuestion().getQuestion(), formQuestion.getForm().getYear());
+			var entity = new FormQuestionDto(formQuestion);
             formQuestionDtos.add(entity);
 		}
 		return formQuestionDtos;
