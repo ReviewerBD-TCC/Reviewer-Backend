@@ -1,45 +1,37 @@
 package com.reviewer.reviewer.models;
 
-import com.reviewer.reviewer.dto.forms.FormIndicationDto;
-import com.reviewer.reviewer.dto.forms.IndicatedUserDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@Table(name = "form_indication")
-@Entity(name = "forms_indications")
+@Entity(name = "Indicando")
+@Table(name = "indicando")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class FormIndication {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "indicating_user_id")
-    private User indicatingUser;
+    @JoinColumn(name = "userIndication")
+    private User userIndication;
 
     @ManyToOne
-    @JoinColumn(name = "indicatedUsers_id")
-    private IndicatedUsers indicatedUsers;
+    @JoinColumn(name = "indicated_id")
+    private Indicated indicated;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private List<IndicatedUsers> fk_formIndication;
 
+    public FormIndication(User user, Indicated indicados) {
+        this.userIndication = user;
+        this.indicated = indicados;
+    }
 
     public FormIndication(Long id, User user) {
         this.id = id;
-        this.indicatingUser = user;
+        this.userIndication = user;
 
-    }
-
-    public FormIndication(IndicatedUsers indication, User user) {
-        this.indicatingUser = user;
-        this.indicatedUsers = indication;
     }
 }
