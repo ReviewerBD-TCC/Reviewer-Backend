@@ -1,19 +1,17 @@
 package com.reviewer.reviewer.dto.forms;
 
 import com.reviewer.reviewer.models.FormIndication;
+import com.reviewer.reviewer.models.User;
 
 import java.util.List;
 
 public record FormIndicationResponseDto(
         Long id,
-        Long indicatingUser,
-        List<IndicatedUserDto> indicatedUsers
+        Long userIndication,
+        List<IndicatedResponseDto> indicados
 ) {
-//    public FormIndicationResponseDto(FormIndication formIndicated, IndicatedUserDto indicated) {
-//        this(formIndicated.getId(), formIndicated.getIndicatingUser().getId(), indicated);
-//    }
 
-    public FormIndicationResponseDto(FormIndicationDto form) {
-        this(form.id(), form.indicatingUser(), form.indicatedUsers());
+    public FormIndicationResponseDto(FormIndication lastIndication, User user, List<IndicatedResponseDto> indicadosResponseDto) {
+        this(lastIndication.getId(), lastIndication.getUserIndication().getId(), indicadosResponseDto);
     }
 }
