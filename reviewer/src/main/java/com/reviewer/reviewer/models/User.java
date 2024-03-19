@@ -1,16 +1,13 @@
 package com.reviewer.reviewer.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.reviewer.reviewer.dto.users.RegisterDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Table(name = "users")
 @Entity(name = "user")
@@ -36,7 +33,10 @@ public class User implements UserDetails {
     private List<QuestionAnswer> questionAnswers;
 
     @OneToMany(mappedBy = "userIndicated", cascade = CascadeType.ALL)
-    private List<IndicatedUsers> indicatedUsers;
+    private List<Indicated> userIndicated;
+
+    @OneToMany(mappedBy = "userIndication", cascade = CascadeType.ALL)
+    private List<FormIndication> userIndication;
 
 
     public User(RegisterDto data) {
