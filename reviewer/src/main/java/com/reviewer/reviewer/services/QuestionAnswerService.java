@@ -1,22 +1,16 @@
 package com.reviewer.reviewer.services;
 
 import com.reviewer.reviewer.models.QuestionAnswer;
-import com.reviewer.reviewer.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.el.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.reviewer.reviewer.dto.forms.FormQuestionDto;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 
 import com.reviewer.reviewer.dto.questions.QuestionAnswerResponseDto;
-import com.reviewer.reviewer.dto.questions.QuestionDto;
-import com.reviewer.reviewer.infra.exceptions.QuestionException;
-import com.reviewer.reviewer.infra.exceptions.UserException;
 import com.reviewer.reviewer.infra.validation.Validation;
 import com.reviewer.reviewer.repositories.QuestionAnswerRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
