@@ -1,6 +1,5 @@
 package com.reviewer.reviewer.models;
 
-import com.reviewer.reviewer.dto.forms.IndicadosDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,21 +14,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Indicados {
+public class Indicated {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "indicados", cascade = CascadeType.ALL)
-    private List<Indicando> indicando;
+    @OneToMany(mappedBy = "indicated", cascade = CascadeType.ALL)
+    private List<FormIndication> formIndication;
 
     @ManyToOne
-    @JoinColumn(name = "usuario")
-    private User usuario;
+    @JoinColumn(name = "userIndicated")
+    private User userIndicated;
 
 
-    public Indicados(User user) {
-        this.usuario = user;
+    public Indicated(User user) {
+        this.userIndicated = user;
     }
 }
