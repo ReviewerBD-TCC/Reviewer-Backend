@@ -2,9 +2,7 @@ package com.reviewer.reviewer.services;
 
 import com.reviewer.reviewer.dto.forms.*;
 import com.reviewer.reviewer.models.FormIndication;
-import com.reviewer.reviewer.models.Indicados;
-import com.reviewer.reviewer.models.Indicando;
-import com.reviewer.reviewer.models.IndicatedUsers;
+import com.reviewer.reviewer.models.Indicated;
 import com.reviewer.reviewer.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,38 +14,38 @@ import java.util.List;
 public class FormIndicationService {
 
     @Autowired
-    private IndicandoRepository indicandoRepository;
+    private FormIndicationRepository formIndicationRepository;
 
     @Autowired
-    private IndicadosRepository indicadosRepository;
+    private IndicatedRepository indicatedRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    public IndicandoResponseDto create(IndicandoDto form){
+    public FormIndicationResponseDto create(FormIndicationDto form){
 
-        var usuario = userRepository.findById(form.indicando());
-        List<Indicados> indicados = new ArrayList<>();
-        List<Indicando> indicandoUser = new ArrayList<>();
+        var user = userRepository.findById(form.userIndication());
+        List<Indicated> indicatedList = new ArrayList<>();
+        List<FormIndication> indicationUser = new ArrayList<>();
 
         for (int i = 0; i < form.indicados().size(); i++) {
-            var usuarioIndicado = userRepository.findById(form.indicados().get(i).usuario());
-            var indicado = new Indicados(usuarioIndicado.get());
-            indicadosRepository.save(indicado);
+            var userIndicated = userRepository.findById(form.indicados().get(i).userIndicated());
+            var indicated = new Indicated(userIndicated.get());
+            indicatedRepository.save(indicated);
 
-            var indicando = new Indicando(usuario.get(), indicado);
-            indicandoRepository.save(indicando);
+            var indication = new FormIndication(user.get(), indicated);
+            formIndicationRepository.save(indication);
 
-            indicandoUser.add(indicando);
+            indicationUser.add(indication);
 
-            indicados.add(indicado);
+            indicatedList.add(indicated);
         }
 
-        List<IndicadosResponseDto> indicadosResponseDtos = IndicadosResponseDto.fromIndicadosList(indicados);
+        List<IndicatedResponseDto> indicatedResponseDtos = IndicatedResponseDto.fromIndicadosList(indicatedList);
 
 
-        Indicando ultimoIndicando = indicandoUser.get(indicandoUser.size() - 1);
-        IndicandoResponseDto responseDto = new IndicandoResponseDto(ultimoIndicando, usuario.get(), indicadosResponseDtos);
+        FormIndication lastIndication = indicationUser.get(indicationUser.size() - 1);
+        FormIndicationResponseDto responseDto = new FormIndicationResponseDto(lastIndication, user.get(), indicatedResponseDtos);
 
         return responseDto;
     }
