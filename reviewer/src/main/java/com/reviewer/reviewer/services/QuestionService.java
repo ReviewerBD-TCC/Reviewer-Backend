@@ -2,13 +2,13 @@ package com.reviewer.reviewer.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.reviewer.reviewer.dto.questions.QuestionDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.reviewer.reviewer.dto.questions.QuestionDto;
-import com.reviewer.reviewer.infra.exceptions.QuestionException;
 import com.reviewer.reviewer.models.Question;
 import com.reviewer.reviewer.repositories.QuestionRepository;
 
@@ -27,7 +27,6 @@ public class QuestionService {
     }
     public QuestionDetailsDto update(Long id, QuestionDto data){
         var question = repository.findById(id);
-        if(question.isEmpty()) throw new QuestionException("erro ao encontrar question");
         var entityQuestion = question.get();
         entityQuestion.setQuestion(data.question());
         entityQuestion.setActive(data.active());
@@ -38,8 +37,9 @@ public class QuestionService {
     }
     public QuestionDetailsDto findById(Long id){
         var question = repository.findById(id);
-        if(question.isEmpty()) throw new QuestionException("erro ao encontrar question");
-
+        if (question.isEmpty()) {
+            throw new NoSuchElementException("Id question: " + id + " not found");
+        }
         return new QuestionDetailsDto(question.get());
 
     }
