@@ -33,7 +33,7 @@ public class FormIndicationController {
     public ResponseEntity<FormIndicationResponseDto> create(@RequestBody @Valid FormIndicationDto data, UriComponentsBuilder uriBuilder){
 
         var userIndication = userRepository.findById(data.userIndication());
-        var formIndication = new FormIndication(data.id(), userIndication.get());
+        var formIndication = new FormIndication(userIndication.get());
 
         var uri = uriBuilder.path("/form_indication/{id}").buildAndExpand(formIndication.getId()).toUri();
 
