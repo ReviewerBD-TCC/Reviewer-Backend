@@ -29,4 +29,8 @@ public class FormQuestion{
     @JoinColumn(name = "question_id")
     private Question question;
 
+    public FormQuestion(Form form, Question question) {
+        this.form = form;
+        this.question = question;
+    }
 }
