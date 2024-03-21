@@ -3,7 +3,7 @@ package com.reviewer.reviewer.controllers;
 
 import java.util.List;
 
-import com.reviewer.reviewer.dto.questions.QuestionDetailsDto;
+import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,22 +32,22 @@ public class QuestionController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<QuestionDetailsDto> create(@RequestBody @Valid QuestionDto data){
+    public ResponseEntity<QuestionResponseDto> create(@RequestBody @Valid QuestionDto data){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
     }
 
    @GetMapping("/{id}")
-    public ResponseEntity<QuestionDetailsDto> findById(@PathVariable(name = "id") Long id){
+    public ResponseEntity<QuestionResponseDto> findById(@PathVariable(name = "id") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
     
     @GetMapping
-    public ResponseEntity<List<QuestionDetailsDto>> findAll(){
+    public ResponseEntity<List<QuestionResponseDto>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<QuestionDetailsDto> update(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionDto data){
+    public ResponseEntity<QuestionResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionDto data){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(id, data));
     }
 
