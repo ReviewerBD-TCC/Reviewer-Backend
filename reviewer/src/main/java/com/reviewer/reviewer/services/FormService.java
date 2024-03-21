@@ -31,12 +31,12 @@ public class FormService {
     private QuestionRepository questionRepository;
 
     public FormsDto create(){
-         var form = new Form();
+        var form = new Form();
         form.setYear(LocalDate.now());
         form.setValidation(LocalDate.now().plusYears(1));
         var formCreated = formRepository.save(form);
         System.out.println(formCreated);
-        return new FormsDto(formCreated.getId(),formCreated.getYear(),formCreated.getValidation());
+        return new FormsDto(formCreated.getYear(),formCreated.getValidation());
 
     }
     public FormQuestionDto createFormQuestion(Long formId, Long questionId){
@@ -45,10 +45,10 @@ public class FormService {
         if(form.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
         var question = questionRepository.findById(questionId);
         if(question.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        var formQuestion = new FormQuestion(null, form.get(), question.get());
+        var formQuestion = new FormQuestion(form.get(), question.get());
         questionFormRepository.save(formQuestion);
 
-        return new FormQuestionDto(form.get().getId(), question.get().getQuestion(), form.get().getYear());
+        return new FormQuestionDto(question.get().getQuestion(), form.get().getYear());
 
     }
     public List<FormQuestionDto> listFormQuestion(Long formId) {
