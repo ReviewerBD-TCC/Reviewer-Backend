@@ -29,8 +29,7 @@ public class FormIndication {
         this.indicated = indicados;
     }
 
-    public FormIndication(Long id, User user) {
-        this.id = id;
+    public FormIndication(User user) {
         this.userIndication = user;
 
     }
