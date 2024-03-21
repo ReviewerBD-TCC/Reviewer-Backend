@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.reviewer.reviewer.dto.questions.QuestionDetailsDto;
+import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,36 +18,41 @@ public class QuestionService {
     @Autowired
     private QuestionRepository repository;
 
-    public QuestionDetailsDto create(QuestionDto data){
+    public QuestionResponseDto create(QuestionDto data){
+
         var question = new Question(data);
 
         repository.save(question);
 
-        return new QuestionDetailsDto(question);
+        return new QuestionResponseDto(question);
     }
-    public QuestionDetailsDto update(Long id, QuestionDto data){
+
+    public QuestionResponseDto update(Long id, QuestionDto data){
         var question = repository.findById(id);
         var entityQuestion = question.get();
         entityQuestion.setQuestion(data.question());
         entityQuestion.setActive(data.active());
         repository.save(entityQuestion);
 
-        return new QuestionDetailsDto(entityQuestion);
+        return new QuestionResponseDto(entityQuestion);
 
     }
-    public QuestionDetailsDto findById(Long id){
+
+    public QuestionResponseDto findById(Long id){
         var question = repository.findById(id);
+
         if (question.isEmpty()) {
             throw new NoSuchElementException("Id question: " + id + " not found");
         }
-        return new QuestionDetailsDto(question.get());
+
+        return new QuestionResponseDto(question.get());
 
     }
-    public List<QuestionDetailsDto> findAll(){
+    public List<QuestionResponseDto> findAll(){
         var questions = repository.findAll();
-        List<QuestionDetailsDto> questionsDto = new ArrayList<>();
+        List<QuestionResponseDto> questionsDto = new ArrayList<>();
         for (Question question : questions) {
-            var questionConverted = new QuestionDetailsDto(question);
+            var questionConverted = new QuestionResponseDto(question);
             questionsDto.add(questionConverted);
         }
         return questionsDto;
