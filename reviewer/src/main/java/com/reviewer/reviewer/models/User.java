@@ -1,5 +1,6 @@
 package com.reviewer.reviewer.models;
 
+import com.reviewer.reviewer.dto.users.Enums.TypeRole;
 import com.reviewer.reviewer.dto.users.RegisterDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +26,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String user;
-    private String type;
+    private TypeRole type;
     private String gkz;
     private String manager;
 
