@@ -1,7 +1,19 @@
 package com.reviewer.reviewer.dto.questions;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public record QuestionAnswerDto (Long userId, Long questionFormId, String answer){
+public record QuestionAnswerDto (
+
+        @NotNull
+        Long userId,
+
+        @NotNull
+        Long questionFormId,
+
+        @NotBlank
+        String answer
+){
     
 }
