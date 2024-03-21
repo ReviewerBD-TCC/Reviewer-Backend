@@ -2,13 +2,13 @@ package com.reviewer.reviewer.dto.questions;
 
 import com.reviewer.reviewer.models.Question;
 
-public record QuestionDetailsDto(
+public record QuestionResponseDto(
         Long id,
         String question,
         Boolean active
 ) {
 
-    public QuestionDetailsDto(Question question) {
+    public QuestionResponseDto(Question question) {
         this(question.getId(), question.getQuestion(), question.getActive());
     }
 }
