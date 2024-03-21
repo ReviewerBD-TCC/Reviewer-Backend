@@ -1,31 +1,36 @@
 package com.reviewer.reviewer.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "question_form")
-@Table(name = "questions_form")
+
+import java.util.List;
+
+@Entity(name = "form_question")
+@Table(name = "form_questions")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class  QuestionForm{
+public class FormQuestion{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "form_id")
     private Form form;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    @JsonIgnore
-    private Question questions;
+    private Question question;
 
+    public FormQuestion(Form form, Question question) {
+        this.form = form;
+        this.question = question;
+    }
 }

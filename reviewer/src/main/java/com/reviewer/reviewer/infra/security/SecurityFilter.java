@@ -1,4 +1,5 @@
 package com.reviewer.reviewer.infra.security;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.reviewer.reviewer.infra.security.service.TokenService;
 import com.reviewer.reviewer.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -9,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
+@RestControllerAdvice
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -33,12 +36,20 @@ public class SecurityFilter extends OncePerRequestFilter {
         var tokenJWT = retrieveToken(request);
 
         if (tokenJWT != null) {
-            var subject = tokenService.getSubject(tokenJWT);
-            var user = repository.findByEmail(subject);
+            try {
+                var subject = tokenService.getSubject(tokenJWT);
+                var user = repository.findByEmail(subject);
 
-            var auhthentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                var auhthentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(auhthentication);
+                SecurityContextHolder.getContext().setAuthentication(auhthentication);
+            } catch (JWTDecodeException ex){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token was not acquired! Log in!");
+
+                return;
+            }
+
         }
 
         filterChain.doFilter(request, response);

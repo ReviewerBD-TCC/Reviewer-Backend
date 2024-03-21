@@ -1,4 +1,13 @@
 package com.reviewer.reviewer.dto.users;
 
-public record LoginDto(String email, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginDto(
+
+        @NotBlank
+        String email,
+
+        @NotBlank
+        String password
+) {
 }

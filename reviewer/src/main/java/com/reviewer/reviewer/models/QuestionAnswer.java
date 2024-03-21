@@ -1,11 +1,13 @@
 package com.reviewer.reviewer.models;
 
+import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Table;
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,29 +20,20 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class  QuestionAnswer{
 
+public class QuestionAnswer{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-	private User user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private QuestionForm questionForm;
- 
+    private FormQuestion formQuestion;
+
     private String answer;
 
-    public QuestionAnswer(User user, QuestionForm questionForm, String answer){
-        this.user = user;
-        this.questionForm = questionForm;
-        this.answer = answer;
-    }
-
-   
 }
-

@@ -1,12 +1,12 @@
 package com.reviewer.reviewer.models;
 
+import com.reviewer.reviewer.dto.users.Enums.TypeRole;
 import com.reviewer.reviewer.dto.users.RegisterDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -26,11 +26,20 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String user;
-    private String type;
+    private TypeRole type;
     private String gkz;
     private String manager;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<QuestionAnswer> questionAnswers;
+
+    @OneToMany(mappedBy = "userIndicated", cascade = CascadeType.ALL)
+    private List<Indicated> userIndicated;
+
+    @OneToMany(mappedBy = "userIndication", cascade = CascadeType.ALL)
+    private List<FormIndication> userIndication;
+
+
     public User(RegisterDto data) {
         this.name = data.name();
         this.email = data.email();
