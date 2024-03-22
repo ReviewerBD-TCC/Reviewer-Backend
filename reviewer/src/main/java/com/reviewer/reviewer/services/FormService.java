@@ -13,6 +13,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.reviewer.reviewer.dto.forms.FormQuestionDto;
 import com.reviewer.reviewer.dto.forms.FormsDto;
+import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
+import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
+import com.reviewer.reviewer.dto.questions.QuestionDto;
+import com.reviewer.reviewer.dto.questions.QuestionsByIdDto;
 import com.reviewer.reviewer.models.Form;
 import com.reviewer.reviewer.repositories.FormRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
@@ -35,33 +39,39 @@ public class FormService {
         form.setYear(LocalDate.now());
         form.setValidation(LocalDate.now().plusYears(1));
         var formCreated = formRepository.save(form);
-        System.out.println(formCreated);
         return new FormsDto(formCreated.getYear(),formCreated.getValidation());
 
     }
-    public FormQuestionDto createFormQuestion(Long formId, Long questionId){
-
-        var form = formRepository.findById(formId);
+    public FormQuestionDto questionFormCreate(QuestionFormListDto data){
+       
+        var form = formRepository.findById(data.formId());
         if(form.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        var question = questionRepository.findById(questionId);
-        if(question.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-        var formQuestion = new FormQuestion(form.get(), question.get());
-        questionFormRepository.save(formQuestion);
+        List<QuestionsByIdDto> questions = new ArrayList<>();
+      
 
-        return new FormQuestionDto(question.get().getQuestion(), form.get().getYear());
+        for(int i =0; i < data.questionsId().size(); i++){
+            var questionById = questionRepository.findById(data.questionsId().get(i).longValue());
+            if(questionById.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+            var formQuestion = new FormQuestion(form.get(), questionById.get());
+            questionFormRepository.save(formQuestion);
+            var questionDto = new QuestionsByIdDto(questionById.get());
+            questions.add(questionDto);
+        }
+        return new FormQuestionDto(form.get().getId(),questions, form.get().getYear());
 
     }
-    public List<FormQuestionDto> listFormQuestion(Long formId) {
+    public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
 		var formQuestions = questionFormRepository.findAllByFormId(formId);
-		List<FormQuestionDto>formQuestionDtos = new ArrayList<>();
+		List<QuestionFormResponseDto>questionFormResponseDtos = new ArrayList<>();
+
         if (formQuestions.isEmpty()) {
             throw new NoSuchElementException("Id form: " + formId + " not found");
         }
         for (FormQuestion formQuestion : formQuestions) {
-			var entity = new FormQuestionDto(formQuestion);
-            formQuestionDtos.add(entity);
+			var entity = new QuestionFormResponseDto(formQuestion);
+            questionFormResponseDtos.add(entity);
 		}
-		return formQuestionDtos;
+		return questionFormResponseDtos;
 		}
     
 }
