@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-import java.util.List;
-
 @Entity(name = "form_question")
 @Table(name = "form_questions")
 @Getter
