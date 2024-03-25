@@ -1,8 +1,5 @@
 package com.reviewer.reviewer.dto.forms;
-
-import com.reviewer.reviewer.dto.questions.QuestionDto;
 import com.reviewer.reviewer.dto.questions.QuestionsByIdDto;
-import com.reviewer.reviewer.models.Form;
 import com.reviewer.reviewer.models.FormQuestion;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
