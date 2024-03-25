@@ -1,8 +1,6 @@
 package com.reviewer.reviewer.dto.questions;
-
 import com.reviewer.reviewer.models.Question;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record QuestionDto(

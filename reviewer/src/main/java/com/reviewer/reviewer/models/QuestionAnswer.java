@@ -1,12 +1,4 @@
 package com.reviewer.reviewer.models;
-
-import java.util.List;
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
-
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

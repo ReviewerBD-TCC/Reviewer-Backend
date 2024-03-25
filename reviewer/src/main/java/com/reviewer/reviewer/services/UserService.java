@@ -26,6 +26,7 @@ public class UserService implements UserDetailsService {
         return repository.findByEmail(email);
     }
 
+
     public List<UserResponseDto> findAll(){
         var users = repository.findAll();
         List<UserResponseDto> userDto = new ArrayList<>();
@@ -36,4 +37,5 @@ public class UserService implements UserDetailsService {
 
         return userDto;
     }
+
 }
