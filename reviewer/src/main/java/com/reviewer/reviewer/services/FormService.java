@@ -4,12 +4,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import com.reviewer.reviewer.models.FormQuestion;
+import com.reviewer.reviewer.models.QuestionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import com.reviewer.reviewer.dto.forms.FormQuestionDto;
+import com.reviewer.reviewer.dto.forms.QuestionFormCreateDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
 import com.reviewer.reviewer.dto.questions.QuestionsByIdDto;
@@ -31,7 +31,7 @@ public class FormService {
     private QuestionRepository questionRepository;
 
 
-    public FormQuestionDto create(QuestionFormListDto data){
+    public QuestionFormCreateDto create(QuestionFormListDto data){
         var form = new Form();
         form.setYear(LocalDate.now());
         form.setValidation(LocalDate.now().plusYears(1));
@@ -43,12 +43,12 @@ public class FormService {
         for(int i =0; i < data.questionsId().size(); i++){
             var questionById = questionRepository.findById(data.questionsId().get(i).longValue());
             if(questionById.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
-            var formQuestion = new FormQuestion(form, questionById.get());
+            var formQuestion = new QuestionForm(form, questionById.get());
             questionFormRepository.save(formQuestion);
             var questionDto = new QuestionsByIdDto(questionById.get());
             questions.add(questionDto);
         }
-        return new FormQuestionDto(form.getId(),questions, form.getYear());
+        return new QuestionFormCreateDto(form.getId(),questions, form.getYear());
 
     }
     public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
@@ -58,7 +58,7 @@ public class FormService {
         if (formQuestions.isEmpty()) {
             throw new NoSuchElementException("Id form: " + formId + " not found");
         }
-        for (FormQuestion formQuestion : formQuestions) {
+        for (QuestionForm formQuestion : formQuestions) {
 			var entity = new QuestionFormResponseDto(formQuestion);
             questionFormResponseDtos.add(entity);
 		}
