@@ -3,8 +3,8 @@ package com.reviewer.reviewer.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "Indicando")
-@Table(name = "indicando")
+@Entity(name = "indication_form")
+@Table(name = "indication_forms")
 @Getter
 @Setter
 @NoArgsConstructor
