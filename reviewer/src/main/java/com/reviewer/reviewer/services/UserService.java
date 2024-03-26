@@ -1,9 +1,5 @@
 package com.reviewer.reviewer.services;
-
-
-import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.dto.users.UserResponseDto;
-import com.reviewer.reviewer.models.Question;
 import com.reviewer.reviewer.models.User;
 import com.reviewer.reviewer.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
