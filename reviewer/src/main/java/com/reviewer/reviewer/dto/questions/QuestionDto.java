@@ -7,11 +7,13 @@ public record QuestionDto(
 
         @NotBlank
         @Pattern(regexp = "^[^0-9]*[a-zA-ZÀ-ú.,!?\\s][^0-9]*$", message = "O campo 'question' só pode conter letras e espaços")
-        String question,
-
+        String questionPt,
+        @NotBlank
+        @Pattern(regexp = "^[^0-9]*[a-zA-ZÀ-ú.,!?\\s][^0-9]*$", message = "O campo 'question' só pode conter letras e espaços")
+        String questionEn,
         Boolean active
 ) {
     public QuestionDto(Question question) {
-        this(question.getQuestion(), question.getActive());
+        this(question.getQuestionPt(),question.getQuestionEn(), question.getActive());
     }
 }
