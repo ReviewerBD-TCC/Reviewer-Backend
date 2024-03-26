@@ -13,8 +13,8 @@ import jakarta.validation.Valid;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/auth")
 @CrossOrigin
+@RequestMapping("auth")
 public class AuthController {
 
     @Autowired
