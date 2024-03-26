@@ -4,11 +4,12 @@ import com.reviewer.reviewer.models.Question;
 
 public record QuestionResponseDto(
         Long id,
-        String question,
+        String questionPt,
+        String questionEn,
         Boolean active
 ) {
 
     public QuestionResponseDto(Question question) {
-        this(question.getId(), question.getQuestion(), question.getActive());
+        this(question.getId(), question.getQuestionPt(),question.getQuestionEn(), question.getActive());
     }
 }
