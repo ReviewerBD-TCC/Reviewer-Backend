@@ -25,16 +25,20 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String question;
-
+    @Column(length = 300)
+    private String questionPt;
+    @Column(length = 300)
+    private String questionEn;
+    
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<FormQuestion> questionForms;
-
+    private List<QuestionForm> questionForms;
+    
     private Boolean active;
 
-    public Question(QuestionDto data){
-        this.question = data.question();
-        this.active = true;
+    public Question (QuestionDto data){
+        this.questionEn = data.questionEn();
+        this.questionPt = data.questionPt();
+        this.active = data.active();
     }
 
 }
