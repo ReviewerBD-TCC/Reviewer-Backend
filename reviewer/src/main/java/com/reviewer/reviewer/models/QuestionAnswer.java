@@ -24,7 +24,7 @@ public class QuestionAnswer{
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private FormQuestion formQuestion;
+    private QuestionForm questionForm;
 
     private String answer;
 
