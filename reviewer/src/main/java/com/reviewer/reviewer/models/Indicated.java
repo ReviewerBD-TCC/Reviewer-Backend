@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Table(name = "indicados")
-@Entity(name = "Indicado")
+@Table(name = "indicateds")
+@Entity(name = "indicated")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
