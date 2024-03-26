@@ -26,15 +26,16 @@ public class QuestionService {
 
     public QuestionResponseDto update(Long id, QuestionDto data){
         var question = repository.findById(id);
+        if(question.isEmpty()) throw new NoSuchElementException("Id question: " + id + " not found");
         var entityQuestion = question.get();
-        entityQuestion.setQuestion(data.question());
+        entityQuestion.setQuestionPt(data.questionPt());
+        entityQuestion.setQuestionEn(data.questionEn());
         entityQuestion.setActive(data.active());
         repository.save(entityQuestion);
 
-        return new QuestionResponseDto(entityQuestion);
+        return new QuestionResponseDto(question.get().getId(),  question.get().getQuestionPt(), question.get().getQuestionEn(), question.get().getActive());
 
     }
-
     public QuestionResponseDto findById(Long id){
         var question = repository.findById(id);
 
