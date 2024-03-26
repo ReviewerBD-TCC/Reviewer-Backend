@@ -4,6 +4,6 @@ import com.reviewer.reviewer.models.Question;
 
 public record QuestionsByIdDto( String question, Boolean active) {
     public QuestionsByIdDto(Question data){
-        this(data.getQuestion(), data.getActive());
+        this(data.getQuestionPt(), data.getActive());
     }
 }
