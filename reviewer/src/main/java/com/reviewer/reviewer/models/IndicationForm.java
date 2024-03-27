@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FormIndication {
+public class IndicationForm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +24,12 @@ public class FormIndication {
     private Indicated indicated;
 
 
-    public FormIndication(User user, Indicated indicados) {
+    public IndicationForm(User user, Indicated indicateds) {
         this.userIndication = user;
-        this.indicated = indicados;
+        this.indicated = indicateds;
     }
 
-    public FormIndication(User user) {
+    public IndicationForm(User user) {
         this.userIndication = user;
 
     }
