@@ -29,10 +29,10 @@ public class IndicationFormController {
 
     @Resource
     private IndicationFormService indicationFormService;
-
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping
     @Transactional
+   
     public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder){
 
         var userIndication = userRepository.findById(data.userIndication());
