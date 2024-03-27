@@ -20,7 +20,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 @SecurityRequirement(name="bearer_key")
 @RestController
-@RequestMapping("users")
+@RequestMapping("api/v1/users")
 public class UserController {
 
     @Autowired
