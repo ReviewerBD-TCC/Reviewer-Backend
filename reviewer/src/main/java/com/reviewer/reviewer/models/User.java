@@ -23,8 +23,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
+    @Column(unique = true)
     private String user;
     private TypeRole type;
     private String gkz;
