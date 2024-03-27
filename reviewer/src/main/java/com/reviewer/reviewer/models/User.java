@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private List<Indicated> userIndicated;
 
     @OneToMany(mappedBy = "userIndication", cascade = CascadeType.ALL)
-    private List<FormIndication> userIndication;
+    private List<IndicationForm> userIndication;
 
 
     public User(RegisterDto data) {
@@ -52,15 +52,15 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         String role = "ROLE_USER";
 
-       if ("admin".equals(getType())) {
-           role = "ROLE_ADMIN";
-       }
+        if (TypeRole.ROLE_ADMIN.equals(getType())) {
+            role = "ROLE_ADMIN";
+        }
+
+        System.out.println(role);
 
         return List.of(new SimpleGrantedAuthority(role));
-
     }
 
     @Override
