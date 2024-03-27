@@ -21,7 +21,7 @@ public class Indicated {
     private Long id;
 
     @OneToMany(mappedBy = "indicated", cascade = CascadeType.ALL)
-    private List<FormIndication> formIndication;
+    private List<IndicationForm> indicationForms;
 
     @ManyToOne
     @JoinColumn(name = "userIndicated")
