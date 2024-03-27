@@ -30,16 +30,9 @@ public class IndicationFormController {
     @Resource
     private IndicationFormService indicationFormService;
 
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping
     @Transactional
-    public ResponseEntity<FormIndicationResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder){
-
-        var userIndication = userRepository.findById(data.userIndication());
-        var formIndication = new IndicationForm(userIndication.get());
-
-        var uri = uriBuilder.path("/indication_form/{id}").buildAndExpand(formIndication.getId()).toUri();
-    }
-    @Secured("ROLE_USER")
     public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder){
 
         var userIndication = userRepository.findById(data.userIndication());
