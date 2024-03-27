@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class IndicationFormService {
@@ -24,13 +25,6 @@ public class IndicationFormService {
     @Autowired
     private UserRepository userRepository;
 
-
-    public FormIndicationResponseDto create(IndicationFormDto form){
-
-        var user = userRepository.findById(form.userIndication());
-        List<Indicated> indicatedList = new ArrayList<>();
-        List<IndicationForm> userIndicationList = new ArrayList<>();
-    }
     public IndicationFormResponseDto create(@Valid IndicationFormDto form){
 
         var user = userRepository.findById(form.userIndication());
@@ -38,31 +32,33 @@ public class IndicationFormService {
         List<IndicationForm> indicationUser = new ArrayList<>();
 
         for (int i = 0; i < form.indicateds().size(); i++) {
+            
             var userIndicated = userRepository.findById(form.indicateds().get(i).userIndicated());
             var indicated = new Indicated(userIndicated.get());
-            indicatedRepository.save(indicated);
-
+            indicatedList.add(indicated);
             var indication = new IndicationForm(user.get(), indicated);
 
-            formIndicationRepository.save(indication);
-
-            indicationFormRepository.save(indication);
 
 
-            userIndicationList.add(indication);
+            if(user.get().getId().equals(indicatedList.get(i).getUserIndicated().getId()) && indicatedList.get(i).getUserIndicated().getEmail().equals(userIndicated.get().getEmail())){
+                throw new NoSuchElementException("You repeated a user id in your indications! ");
+            }
+            else {
+                System.out.println("nao repetiu");
+                indicatedRepository.save(indicated);
+                indicationFormRepository.save(indication);
+                indicationUser.add(indication);
+            }
 
-            indicatedList.add(indicated);
+            
+          
         }
 
         List<IndicatedResponseDto> indicatedResponseDtos = IndicatedResponseDto.fromIndicatedList(indicatedList);
 
 
-        IndicationForm lastIndication = userIndicationList.get(userIndicationList.size() - 1);
-        FormIndicationResponseDto responseDto = new FormIndicationResponseDto(lastIndication, user.get(), indicatedResponseDtos);
-
         IndicationForm lastIndication = indicationUser.get(indicationUser.size() - 1);
         IndicationFormResponseDto responseDto = new IndicationFormResponseDto(lastIndication, user.get(), indicatedResponseDtos);
-
 
         return responseDto;
     }
