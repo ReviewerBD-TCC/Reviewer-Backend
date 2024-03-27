@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("email")
+@RequestMapping("api/v1/email")
 @SecurityRequirement(name = "bearer_key")
 @CrossOrigin
 public class EmailController {
