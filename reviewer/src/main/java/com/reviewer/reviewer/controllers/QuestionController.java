@@ -7,6 +7,7 @@ import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,21 +35,25 @@ public class QuestionController {
 
     @PostMapping
     @Transactional
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<QuestionResponseDto> create(@RequestBody @Valid QuestionDto data){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
     }
 
    @GetMapping("/{id}")
+   @Secured("ROLE_ADMIN")
     public ResponseEntity<QuestionResponseDto> findById(@PathVariable(name = "id") Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
     
     @GetMapping
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<QuestionResponseDto>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
     
     @PutMapping("/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<QuestionResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionDto data){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(id, data));
     }
