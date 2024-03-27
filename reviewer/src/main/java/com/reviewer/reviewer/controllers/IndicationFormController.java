@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @CrossOrigin
 @SecurityRequirement(name = "bearer-key")
-@RequestMapping("indication_form")
+@RequestMapping("api/v1/indication_form")
 public class IndicationFormController {
 
     @Autowired
