@@ -21,26 +21,26 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @CrossOrigin
 @SecurityRequirement(name = "bearer-key")
-@RequestMapping("form_indication")
-public class FormIndicationController {
+@RequestMapping("indication_form")
+public class IndicationFormController {
 
     @Autowired
     private UserRepository userRepository;
 
     @Resource
-    private IndicationFormService formIndicationService;
+    private IndicationFormService indicationFormService;
 
     @PostMapping
     @Transactional
     @Secured("ROLE_USER")
-    public ResponseEntity<FormIndicationResponseDto> create(@RequestBody @Valid FormIndicationDto data, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder){
 
         var userIndication = userRepository.findById(data.userIndication());
         var indicationForm = new IndicationForm(userIndication.get());
 
-        var uri = uriBuilder.path("/form_indication/{id}").buildAndExpand(indicationForm.getId()).toUri();
+        var uri = uriBuilder.path("/indication_form/{id}").buildAndExpand(indicationForm.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(formIndicationService.create(data));
+        return ResponseEntity.created(uri).body(indicationFormService.create(data));
     }
 
 }
