@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private List<Indicated> userIndicated;
 
     @OneToMany(mappedBy = "userIndication", cascade = CascadeType.ALL)
-    private List<FormIndication> userIndication;
+    private List<IndicationForm> userIndication;
 
 
     public User(RegisterDto data) {
