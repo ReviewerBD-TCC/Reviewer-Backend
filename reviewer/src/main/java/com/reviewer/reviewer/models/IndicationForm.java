@@ -24,9 +24,12 @@ public class IndicationForm {
     private Indicated indicated;
 
 
-    public IndicationForm(User user, Indicated indicados) {
+
+
+    public IndicationForm(User user, Indicated indicateds) {
+
         this.userIndication = user;
-        this.indicated = indicados;
+        this.indicated = indicateds;
     }
 
     public IndicationForm(User user) {

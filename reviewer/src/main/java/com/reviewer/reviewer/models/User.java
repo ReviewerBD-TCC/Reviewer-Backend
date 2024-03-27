@@ -52,15 +52,15 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         String role = "ROLE_USER";
 
-       if ("admin".equals(getType())) {
-           role = "ROLE_ADMIN";
-       }
+        if (TypeRole.ROLE_ADMIN.equals(getType())) {
+            role = "ROLE_ADMIN";
+        }
+
+        System.out.println(role);
 
         return List.of(new SimpleGrantedAuthority(role));
-
     }
 
     @Override
