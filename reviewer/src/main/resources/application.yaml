@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/reviewer_api
     username: root
-
+    password: root
   main:
     allow-circular-references: true
 
