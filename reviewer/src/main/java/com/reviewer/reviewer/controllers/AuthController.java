@@ -14,7 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @CrossOrigin
-@RequestMapping("auth")
+@RequestMapping("api/v1/auth")
 public class AuthController {
 
     @Autowired
