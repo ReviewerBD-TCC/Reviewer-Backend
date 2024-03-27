@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record FormIndicationDto(
+public record IndicationFormDto(
 
         @NotNull
         Long userIndication,
