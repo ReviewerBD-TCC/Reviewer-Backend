@@ -13,7 +13,7 @@ spring:
     hibernate:
       ddl-auto: update
   mail:
-    email: <your_email>
+      email: <your_email>
     host: rb-smtp-auth.rbesz01.com
     port: 25
     username:  <your_username>
