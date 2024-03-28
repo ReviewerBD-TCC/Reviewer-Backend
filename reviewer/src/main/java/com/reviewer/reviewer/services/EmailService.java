@@ -28,6 +28,7 @@ public class EmailService {
 			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 			MimeMessageHelper mimeMessageHelper;
 			mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+			mimeMessageHelper.setBcc(data.bcc());
 			mimeMessageHelper.setFrom(sender);
 			mimeMessageHelper.setTo(data.to());
 			mimeMessageHelper.setText(data.body(), true);
