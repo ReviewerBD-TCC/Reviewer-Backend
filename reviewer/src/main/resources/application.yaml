@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/reviewer_api
     username: root
-
+    password: root
   main:
     allow-circular-references: true
 
@@ -12,6 +12,20 @@ spring:
 
     hibernate:
       ddl-auto: update
+  mail:
+    email: <your_email>
+    host: rb-smtp-auth.rbesz01.com
+    port: 25
+    username:  <your_username>
+    password: <your_password>
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: rb-smtp-auth.rbesz01.com
+          auth: true
+          starttls:
+            enable: true       
 
 server:
   port: 8056
@@ -19,6 +33,7 @@ server:
   error:
     include-stacktrace: never
 
+ 
 api:
   security:
     token:

@@ -15,9 +15,9 @@ public record IndicatedResponseDto(
         this.name = name;
     }
 
-    public static List<IndicatedResponseDto> fromIndicadosList(List<Indicated> indicadosList) {
+    public static List<IndicatedResponseDto> fromIndicatedList(List<Indicated> indicatedsList) {
         List<IndicatedResponseDto> dtos = new ArrayList<>();
-        for (Indicated indicated : indicadosList) {
+        for (Indicated indicated : indicatedsList) {
             dtos.add(new IndicatedResponseDto(indicated.getId(), indicated.getUserIndicated().getName()));
         }
         return dtos;

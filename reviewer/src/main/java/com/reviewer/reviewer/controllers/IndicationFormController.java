@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @CrossOrigin
 @SecurityRequirement(name = "bearer-key")
-@RequestMapping("indication_form")
+@RequestMapping("api/v1/indication_form")
 public class IndicationFormController {
 
     @Autowired
@@ -29,10 +29,10 @@ public class IndicationFormController {
 
     @Resource
     private IndicationFormService indicationFormService;
-
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @PostMapping
     @Transactional
-    @Secured("ROLE_USER")
+   
     public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder){
 
         var userIndication = userRepository.findById(data.userIndication());
@@ -40,7 +40,8 @@ public class IndicationFormController {
 
         var uri = uriBuilder.path("/indication_form/{id}").buildAndExpand(indicationForm.getId()).toUri();
 
+
         return ResponseEntity.created(uri).body(indicationFormService.create(data));
     }
-
+    
 }

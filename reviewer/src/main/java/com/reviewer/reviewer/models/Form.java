@@ -25,12 +25,12 @@ public class Form {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy")
     private LocalDate year;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy")
     private LocalDate validation;
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
-    private List<QuestionForm> formQuestions;
+    private List<QuestionForm> questionForms;
 }

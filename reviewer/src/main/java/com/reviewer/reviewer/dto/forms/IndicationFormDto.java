@@ -10,6 +10,6 @@ public record IndicationFormDto(
         Long userIndication,
 
         @NotNull
-        List<IndicatedDto> indicados
+        List<IndicatedDto> indicateds
 ) {
 }

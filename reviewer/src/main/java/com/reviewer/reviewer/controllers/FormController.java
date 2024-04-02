@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 @RestController
 @CrossOrigin
 @SecurityRequirement(name = "bearer-key")
-@RequestMapping("form")
+@RequestMapping("api/v1/form")
 public class FormController {
 
     @Autowired
