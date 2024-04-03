@@ -36,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null) {
             try {
-                var subject = tokenService.getSubject(tokenJWT);
+                var subject = tokenService.getSubject(tokenJWT, response);
                 var user = repository.findByEmail(subject);
 
                 var auhthentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -45,7 +45,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             } catch (JWTDecodeException ex){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Token was not acquired! Log in!");
-
+                return;
+            }
+             catch (NullPointerException ex){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
