@@ -13,14 +13,12 @@ import jakarta.validation.Valid;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@CrossOrigin
+@CrossOrigin( origins = "*")
 @RequestMapping("api/v1/auth")
 public class AuthController {
 
     @Autowired
     private TokenService tokenService;
-
-
 
     @PostMapping("/login")
     @Transactional

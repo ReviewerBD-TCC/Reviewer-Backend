@@ -20,7 +20,7 @@ import java.security.Principal;
 import java.util.List;
 
 
-@CrossOrigin(origins = "*")
+@CrossOrigin
 @SecurityRequirement(name="bearer_key")
 @RestController
 @RequestMapping("api/v1/users")
@@ -36,6 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @CrossOrigin
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<UserDetailsResponseDto> getCurrentUser(Principal principal) {
         if (principal instanceof UsernamePasswordAuthenticationToken) {

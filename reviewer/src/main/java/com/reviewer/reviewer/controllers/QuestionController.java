@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @SecurityRequirement(name = "bearer-key")
-@CrossOrigin
+@CrossOrigin( origins = "*")
 @RequestMapping("api/v1/question")
 public class QuestionController {
 
