@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @SecurityRequirement(name = "bearer-key")
-@CrossOrigin
+@CrossOrigin( origins = "*")
 @RequestMapping("api/v1/answer_form")
 public class QuestionAnswerController {
     @Autowired

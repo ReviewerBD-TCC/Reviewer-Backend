@@ -19,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin( origins = "*")
 @SecurityRequirement(name = "bearer-key")
 @RequestMapping("api/v1/indication_form")
 public class IndicationFormController {
