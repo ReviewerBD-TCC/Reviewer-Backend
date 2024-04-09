@@ -1,6 +1,7 @@
 package com.reviewer.reviewer.services;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
@@ -33,8 +36,11 @@ public class FormService {
 
     public QuestionFormCreatedDto create(QuestionFormListDto data){
         var form = new Form();
-        form.setYear(data.year());
-        form.setValidation(LocalDate.now().plusYears(1));
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse(data.year(), formatTime);
+        form.setYear(date);
+        form.setTitle(data.title());
+        form.setValidation(form.getYear().plusYears(1));
         formRepository.save(form);
    
         List<QuestionsByIdDto> questions = new ArrayList<>();
