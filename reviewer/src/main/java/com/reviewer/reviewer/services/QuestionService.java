@@ -5,6 +5,8 @@ import java.util.NoSuchElementException;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.reviewer.reviewer.dto.questions.QuestionActiveDto;
 import com.reviewer.reviewer.dto.questions.QuestionDto;
 import com.reviewer.reviewer.models.Question;
 import com.reviewer.reviewer.repositories.QuestionRepository;
@@ -36,6 +38,14 @@ public class QuestionService {
         return new QuestionResponseDto(question.get().getId(),  question.get().getQuestionPt(), question.get().getQuestionEn(), question.get().getActive());
 
     }
+    public QuestionResponseDto partialUpdate(Long id, QuestionActiveDto data){
+        var question = repository.findById(id);
+        if(question.isEmpty()) throw new NoSuchElementException("Id question: " + id + " not found");
+        question.get().setActive(data.active());
+        repository.save(question.get());
+        return new QuestionResponseDto(question.get());
+    }
+    
     public QuestionResponseDto findById(Long id){
         var question = repository.findById(id);
 
