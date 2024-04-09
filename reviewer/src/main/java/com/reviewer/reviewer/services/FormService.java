@@ -33,7 +33,7 @@ public class FormService {
 
     public QuestionFormCreatedDto create(QuestionFormListDto data){
         var form = new Form();
-        form.setYear(LocalDate.now());
+        form.setYear(data.year());
         form.setValidation(LocalDate.now().plusYears(1));
         formRepository.save(form);
    
