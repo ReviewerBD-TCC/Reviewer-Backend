@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import com.reviewer.reviewer.dto.forms.QuestionFormCreateDto;
+import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
 import com.reviewer.reviewer.dto.questions.QuestionsByIdDto;
@@ -31,7 +31,7 @@ public class FormService {
     private QuestionRepository questionRepository;
 
 
-    public QuestionFormCreateDto create(QuestionFormListDto data){
+    public QuestionFormCreatedDto create(QuestionFormListDto data){
         var form = new Form();
         form.setYear(LocalDate.now());
         form.setValidation(LocalDate.now().plusYears(1));
@@ -48,7 +48,7 @@ public class FormService {
             var questionDto = new QuestionsByIdDto(questionById.get());
             questions.add(questionDto);
         }
-        return new QuestionFormCreateDto(form.getId(),questions, form.getYear());
+        return new QuestionFormCreatedDto(form.getId(), form.getTitle(), questions, form.getYear());
 
     }
     public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
