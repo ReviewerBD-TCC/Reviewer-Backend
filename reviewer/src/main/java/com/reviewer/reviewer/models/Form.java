@@ -25,6 +25,8 @@ public class Form {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
     @DateTimeFormat(pattern = "yyyy")
     private LocalDate year;
 

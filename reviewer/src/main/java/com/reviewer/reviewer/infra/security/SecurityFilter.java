@@ -27,7 +27,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (request.getRequestURI().equals("/api/v1/auth/register") && request.getMethod().equals("POST")) {
+        if (request.getRequestURI().equals("api/v1/auth/register") && request.getMethod().equals("POST")) {
             filterChain.doFilter(request, response);
             return;
         }

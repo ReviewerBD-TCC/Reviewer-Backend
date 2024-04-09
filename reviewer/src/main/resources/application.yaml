@@ -13,10 +13,9 @@ spring:
     hibernate:
       ddl-auto: update
   mail:
-    email: <your_email>
     host: rb-smtp-auth.rbesz01.com
     port: 25
-    username:  <your_username>
+    username:  bxfrca@bosch.com
     password: <your_password>
     properties:
       mail:

@@ -25,7 +25,7 @@ public class EmailController {
 	private EmailService service;
 	
 	@PostMapping
-	public ResponseEntity<EmailResponseDto> sendEmail(@ModelAttribute EmailRecordDto data){
+	public ResponseEntity<?> sendEmail(@RequestBody EmailRecordDto data){
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.sendMail(data));
 	}
 }

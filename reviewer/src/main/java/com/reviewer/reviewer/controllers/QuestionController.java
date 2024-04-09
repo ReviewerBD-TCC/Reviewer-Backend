@@ -11,6 +11,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.reviewer.reviewer.dto.questions.QuestionActiveDto;
 import com.reviewer.reviewer.dto.questions.QuestionDto;
 import com.reviewer.reviewer.services.QuestionService;
 
@@ -56,6 +58,11 @@ public class QuestionController {
     @Secured("ROLE_ADMIN")
     public ResponseEntity<QuestionResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionDto data){
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(id, data));
+    }
+    @PatchMapping("/{id}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<QuestionResponseDto> partialUpdate(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionActiveDto data){
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.partialUpdate(id, data));
     }
 
 
