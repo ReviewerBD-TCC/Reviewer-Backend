@@ -33,7 +33,7 @@ public class EmailService {
 			mimeMessageHelper.setTo(data.to());
 			mimeMessageHelper.setText(data.body(), true);
 			mimeMessageHelper.setSubject(data.subject());
-			mimeMessageHelper.setCc(data.cc());
+			
 			
 			var file = data.attchment();
 			if(file != null) {
@@ -45,7 +45,7 @@ public class EmailService {
 			
 			javaMailSender.send(mimeMessage);
 			
-			return new EmailResponseDto("Email send successfully!");
+			return new EmailResponseDto("Email sent successfully!");
 		}
 		
 		catch (Exception e) {
