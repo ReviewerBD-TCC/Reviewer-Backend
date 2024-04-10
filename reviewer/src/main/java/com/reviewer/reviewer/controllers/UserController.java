@@ -30,7 +30,7 @@ public class UserController {
     private UserService service;
 
     @GetMapping
-    @Secured("ROLE_ADMIN")
+    @Secured({"ROLE_ADMIN", "ROLE_USER"})
     public ResponseEntity<List<UserResponseDto>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
