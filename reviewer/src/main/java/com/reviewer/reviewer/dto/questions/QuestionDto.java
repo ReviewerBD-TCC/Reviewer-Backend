@@ -6,10 +6,8 @@ import jakarta.validation.constraints.Pattern;
 public record QuestionDto(
 
         @NotBlank
-        @Pattern(regexp = "^[^0-9]*[a-zA-ZÀ-ú.,!?\\s][^0-9]*$", message = "O campo 'question' só pode conter letras e espaços")
         String questionPt,
         @NotBlank
-        @Pattern(regexp = "^[^0-9]*[a-zA-ZÀ-ú.,!?\\s][^0-9]*$", message = "O campo 'question' só pode conter letras e espaços")
         String questionEn,
         Boolean active
 ) {
