@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 
 
 import com.reviewer.reviewer.dto.email.EmailRecordDto;
-import com.reviewer.reviewer.dto.email.EmailResponseDto;
 import com.reviewer.reviewer.services.EmailService;
 import org.springframework.web.bind.annotation.*;
 
