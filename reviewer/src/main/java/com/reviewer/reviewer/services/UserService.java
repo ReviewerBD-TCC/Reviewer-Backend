@@ -1,6 +1,5 @@
 package com.reviewer.reviewer.services;
 import com.reviewer.reviewer.dto.users.UserDetailsResponseDto;
-import com.reviewer.reviewer.dto.users.UserResponseDto;
 import com.reviewer.reviewer.models.User;
 import com.reviewer.reviewer.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +25,11 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<UserResponseDto> findAll(){
+    public List<UserDetailsResponseDto> findAll(){
         var users = repository.findAll();
-        List<UserResponseDto> userDto = new ArrayList<>();
+        List<UserDetailsResponseDto> userDto = new ArrayList<>();
         for (User user : users) {
-            var userResponse = new UserResponseDto(user);
+            var userResponse = new UserDetailsResponseDto(user);
             userDto.add(userResponse);
         }
 
