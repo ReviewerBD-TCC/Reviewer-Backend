@@ -1,7 +1,6 @@
 package com.reviewer.reviewer.controllers;
 
 import com.reviewer.reviewer.dto.users.UserDetailsResponseDto;
-import com.reviewer.reviewer.dto.users.UserResponseDto;
 import com.reviewer.reviewer.services.UserService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,7 +30,7 @@ public class UserController {
 
     @GetMapping
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    public ResponseEntity<List<UserResponseDto>> findAll(){
+    public ResponseEntity<List<UserDetailsResponseDto>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
 
