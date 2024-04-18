@@ -32,7 +32,7 @@ public class QuestionAnswerController {
 
     @PostMapping
     @Transactional
-    @Secured("ROLE_USER")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<QuestionAnswerResponseDto> create(@RequestBody @Valid QuestionAnswerDto data){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
     }
