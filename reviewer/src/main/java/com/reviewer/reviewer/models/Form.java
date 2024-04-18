@@ -27,10 +27,10 @@ public class Form {
 
     private String title;
 
-    @DateTimeFormat(pattern = "yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate year;
 
-    @DateTimeFormat(pattern = "yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate validation;
 
     @OneToMany(mappedBy = "form", cascade = CascadeType.ALL)
