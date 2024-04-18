@@ -1,5 +1,7 @@
 package com.reviewer.reviewer.services;
 import com.reviewer.reviewer.models.QuestionAnswer;
+import com.reviewer.reviewer.models.QuestionForm;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +30,22 @@ public class QuestionAnswerService {
 
 
     public QuestionAnswerResponseDto create(QuestionAnswerDto data) {
-  
+        var questionAnswer =new QuestionAnswer();
         Validation validation = new Validation(data);
         var user = validation.UserNotFound(userRepository);
         var questionForm = validation.FormQuestionNotFound(questionFormRepository);
-
-     
-        var questionAnswer = new QuestionAnswer(null, user,  questionForm, data.answer());
-        questionAnswerRepository.save(questionAnswer);
+        int amountQuestion =0;
+        System.out.println(data.answers());
+        var questions = data.answers();
+        for (String answeString : questions) {
+            
+            questionAnswer.setAnswer(questions[amountQuestion]);
+            questionAnswer.setQuestionForm(eachQuestionForm);
+            questionAnswer.setUser(user);
+            questionAnswerRepository.save(questionAnswer);
+            amountQuestion+=1;
+        }
+       
     
         return new QuestionAnswerResponseDto(questionAnswer);
     }
