@@ -12,8 +12,8 @@ public record QuestionAnswerDto (
         @NotNull
         Long questionFormId,
 
-        @NotBlank
-        String answer
+      
+        String []answers
 ){
     
 }
