@@ -42,9 +42,9 @@ public class QuestionAnswerService {
         int amountQuestion =0;
         var answers = data.answers();
         var forms = questionForm.stream().toList();
-        var questionAnswer =new QuestionAnswer();
+        QuestionAnswerResponseDto questionAnswerResponse = null;
         for (String answeString : answers) {
-            
+            var questionAnswer =new QuestionAnswer();
             var question = forms.get(amountQuestion).getQuestion();
             var questionDto = new QuestionResponseDto(question.getId(), question.getQuestionPt(), question.getQuestionEn(),question.getActive());
             questions.add(questionDto);
@@ -55,10 +55,10 @@ public class QuestionAnswerService {
             
             amountQuestion+=1;
             questionAnswerRepository.save(questionAnswer);
-            
+            questionAnswerResponse = new QuestionAnswerResponseDto(questionAnswer, questions, answers);
         }
        
-        return new QuestionAnswerResponseDto(questionAnswer, questions, answers);
+        return questionAnswerResponse;
     }
     public List<QuestionAnswerResponseDto> findAll(){
         var answers = questionAnswerRepository.findAll();
@@ -80,16 +80,16 @@ public class QuestionAnswerService {
     }
     public QuestionAnswerResponseDto findById(Long id){
         var answer = questionAnswerRepository.findById(id);
-        return new QuestionAnswerResponseDto(answer.get());
+        return null;
     }
    public List<QuestionAnswerResponseDto> findByUserId(Long id){
     var answer = questionAnswerRepository.findByUserId(id);
     List<QuestionAnswerResponseDto> answersDto = new ArrayList<>();
     for (QuestionAnswer questionAnswer : answer) {
-        var answerDto = new QuestionAnswerResponseDto(questionAnswer);
-        answersDto.add(answerDto);
+        // var answerDto = new QuestionAnswerResponseDto(questionAnswer);
+        // answersDto.add(answerDto);
     }
-    return answersDto;
+    return null;
    }
 
 }
