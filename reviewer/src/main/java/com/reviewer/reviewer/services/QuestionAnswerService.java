@@ -1,4 +1,5 @@
 package com.reviewer.reviewer.services;
+import com.reviewer.reviewer.models.Question;
 import com.reviewer.reviewer.models.QuestionAnswer;
 import com.reviewer.reviewer.models.QuestionForm;
 
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerResponseDto;
+import com.reviewer.reviewer.dto.questions.QuestionDto;
+import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.infra.validation.Validation;
 import com.reviewer.reviewer.repositories.QuestionAnswerRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
@@ -30,30 +33,47 @@ public class QuestionAnswerService {
 
 
     public QuestionAnswerResponseDto create(QuestionAnswerDto data) {
-        var questionAnswer =new QuestionAnswer();
+       
         Validation validation = new Validation(data);
         var user = validation.UserNotFound(userRepository);
         var questionForm = validation.FormQuestionNotFound(questionFormRepository);
+        List<QuestionResponseDto> questions = new ArrayList<>();
+       
         int amountQuestion =0;
-        System.out.println(data.answers());
-        var questions = data.answers();
-        for (String answeString : questions) {
+        var answers = data.answers();
+        var forms = questionForm.stream().toList();
+        var questionAnswer =new QuestionAnswer();
+        for (String answeString : answers) {
             
-            questionAnswer.setAnswer(questions[amountQuestion]);
-            questionAnswer.setQuestionForm(eachQuestionForm);
+            var question = forms.get(amountQuestion).getQuestion();
+            var questionDto = new QuestionResponseDto(question.getId(), question.getQuestionPt(), question.getQuestionEn(),question.getActive());
+            questions.add(questionDto);
+            System.out.println(forms.get(amountQuestion));
+            questionAnswer.setAnswer(answeString);
+            questionAnswer.setQuestionForm(forms.get(amountQuestion));
             questionAnswer.setUser(user);
-            questionAnswerRepository.save(questionAnswer);
+            
             amountQuestion+=1;
+            questionAnswerRepository.save(questionAnswer);
+            
         }
        
-    
-        return new QuestionAnswerResponseDto(questionAnswer);
+        return new QuestionAnswerResponseDto(questionAnswer, questions, answers);
     }
     public List<QuestionAnswerResponseDto> findAll(){
         var answers = questionAnswerRepository.findAll();
+        List<QuestionResponseDto> questions = new ArrayList<>();
+        int i = 0;
         List<QuestionAnswerResponseDto> answersDto = new ArrayList<>();
+       
         for (QuestionAnswer questionAnswer : answers) {
-            var answerDto = new QuestionAnswerResponseDto(questionAnswer);
+            var question = questionAnswer.getQuestionForm().getQuestion();
+            var questionDto = new QuestionResponseDto(question.getId(), question.getQuestionPt(), question.getQuestionEn(),question.getActive());
+            questions.add(questionDto);
+            String[] answersUser= new String[answers.size()];
+            answersUser[i]=questionAnswer.getAnswer();
+           
+            var answerDto = new QuestionAnswerResponseDto(questionAnswer, questions, answersUser);
             answersDto.add(answerDto);
         }
         return answersDto;
