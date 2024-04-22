@@ -37,6 +37,7 @@ public class QuestionAnswerService {
         Validation validation = new Validation(data);
         var user = validation.UserNotFound(userRepository);
         var questionForm = validation.FormQuestionNotFound(questionFormRepository);
+        
         List<QuestionResponseDto> questions = new ArrayList<>();
        
         int amountQuestion =0;
@@ -48,7 +49,7 @@ public class QuestionAnswerService {
             var question = forms.get(amountQuestion).getQuestion();
             var questionDto = new QuestionResponseDto(question.getId(), question.getQuestionPt(), question.getQuestionEn(),question.getActive());
             questions.add(questionDto);
-            System.out.println(forms.get(amountQuestion));
+            System.out.println(forms.get(amountQuestion).getId());
             questionAnswer.setAnswer(answeString);
             questionAnswer.setQuestionForm(forms.get(amountQuestion));
             questionAnswer.setUser(user);
