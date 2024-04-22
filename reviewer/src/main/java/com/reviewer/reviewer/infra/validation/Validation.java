@@ -15,8 +15,8 @@ public record Validation (QuestionAnswerDto data){
         return user.get();
     }
     public List<QuestionForm> FormQuestionNotFound(QuestionFormRepository repository){
-        var formQuestion = repository.findAllByFormId(data.questionFormId());
-        return formQuestion;
+        var questionForm = repository.findAllByFormId(data.questionFormId());
+        return questionForm;
     }
   
    
