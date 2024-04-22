@@ -15,6 +15,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
+import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.dto.questions.QuestionsByIdDto;
 import com.reviewer.reviewer.models.Form;
 import com.reviewer.reviewer.repositories.FormRepository;
@@ -61,14 +62,17 @@ public class FormService {
 
     }
     public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
-		var formQuestions = questionFormRepository.findAllByFormId(formId);
+		var questionForms = questionFormRepository.findAllByFormId(formId);
 		List<QuestionFormResponseDto>questionFormResponseDtos = new ArrayList<>();
-
-        if (formQuestions.isEmpty()) {
+       
+        if (questionForms.isEmpty()) {
             throw new NoSuchElementException("Id form: " + formId + " not found");
         }
-        for (QuestionForm formQuestion : formQuestions) {
-			var entity = new QuestionFormResponseDto(formQuestion);
+        for (QuestionForm questionForm : questionForms) {
+            List<QuestionResponseDto> questions = new ArrayList<>();
+            var question = new QuestionResponseDto(questionForm.getQuestion());
+            questions.add(question);
+			var entity = new QuestionFormResponseDto(questionForm, questions);
             questionFormResponseDtos.add(entity);
 		}
 		return questionFormResponseDtos;
