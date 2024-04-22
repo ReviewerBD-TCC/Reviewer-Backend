@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin( origins = "*")
+@CrossOrigin
 @SecurityRequirement(name = "bearer-key")
 @RequestMapping("api/v1/form")
 public class FormController {
