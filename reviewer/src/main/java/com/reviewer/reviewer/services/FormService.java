@@ -64,16 +64,17 @@ public class FormService {
     public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
 		var questionForms = questionFormRepository.findAllByFormId(formId);
 		List<QuestionFormResponseDto>questionFormResponseDtos = new ArrayList<>();
-       
+        List<QuestionResponseDto> questions = new ArrayList<>();
         if (questionForms.isEmpty()) {
             throw new NoSuchElementException("Id form: " + formId + " not found");
         }
         for (QuestionForm questionForm : questionForms) {
-            List<QuestionResponseDto> questions = new ArrayList<>();
+        
             var question = new QuestionResponseDto(questionForm.getQuestion());
-            questions.add(question);
-			var entity = new QuestionFormResponseDto(questionForm, questions);
+            System.out.println("Teste"+question);
+			var entity = new QuestionFormResponseDto(questionForm);
             questionFormResponseDtos.add(entity);
+            questions.add(question);
 		}
 		return questionFormResponseDtos;
 		}
