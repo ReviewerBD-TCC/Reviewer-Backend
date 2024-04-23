@@ -2,6 +2,7 @@ package com.reviewer.reviewer.controllers;
 
 
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
+import com.reviewer.reviewer.dto.questions.QuestionAnswerFindAllDto;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerResponseDto;
 import com.reviewer.reviewer.services.QuestionAnswerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -38,17 +39,17 @@ public class QuestionAnswerController {
     }
     @GetMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<QuestionAnswerResponseDto>> findAll(){
+    public ResponseEntity<List<QuestionAnswerFindAllDto>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
     @GetMapping("/{id}")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<QuestionAnswerResponseDto> findById(@PathVariable(name = "id")Long id){
+    public ResponseEntity<QuestionAnswerFindAllDto> findById(@PathVariable(name = "id")Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
     @GetMapping("/user/{id}")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<QuestionAnswerResponseDto>> findByUserId(@PathVariable(name = "id")Long id){
+    public ResponseEntity<List<QuestionAnswerFindAllDto>> findByUserId(@PathVariable(name = "id")Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.findByUserId(id));
     }
 
