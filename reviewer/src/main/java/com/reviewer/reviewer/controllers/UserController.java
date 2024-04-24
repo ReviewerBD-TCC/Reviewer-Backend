@@ -1,6 +1,5 @@
 package com.reviewer.reviewer.controllers;
 
-import com.reviewer.reviewer.dto.users.UserDetailsResponseDto;
 import com.reviewer.reviewer.dto.users.UserResponseDto;
 import com.reviewer.reviewer.services.UserService;
 
@@ -38,7 +37,7 @@ public class UserController {
     @GetMapping("/me")
     @CrossOrigin
     @Secured({"ROLE_ADMIN", "ROLE_USER"})
-    public ResponseEntity<UserDetailsResponseDto> getCurrentUser(Principal principal) {
+    public ResponseEntity<UserResponseDto> getCurrentUser(Principal principal) {
         if (principal instanceof UsernamePasswordAuthenticationToken) {
             return ResponseEntity.status(HttpStatus.OK).body(service.findMe(principal));
         } else {
