@@ -10,13 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
-import com.reviewer.reviewer.dto.questions.QuestionsByIdDto;
 import com.reviewer.reviewer.models.Form;
 import com.reviewer.reviewer.repositories.FormRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
@@ -47,15 +44,13 @@ public class FormService {
         form.setValidation(form.getYear().plusYears(1));
         formRepository.save(form);
    
-        List<QuestionsByIdDto> questions = new ArrayList<>();
-      
-
+        List<QuestionResponseDto> questions = new ArrayList<>();
         for(int i =0; i < data.questionsId().size(); i++){
             var questionById = questionRepository.findById(data.questionsId().get(i).longValue());
             if(questionById.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
             var formQuestion = new QuestionForm(form, questionById.get());
             questionFormRepository.save(formQuestion);
-            var questionDto = new QuestionsByIdDto(questionById.get());
+            var questionDto = new QuestionResponseDto(questionById.get());
             questions.add(questionDto);
         }
         return new QuestionFormCreatedDto(form.getId(), form.getTitle(), questions, form.getYear());
