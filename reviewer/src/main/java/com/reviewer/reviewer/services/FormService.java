@@ -36,11 +36,19 @@ public class FormService {
 
     public QuestionFormCreatedDto create(QuestionFormListDto data){
         var form = new Form();
-        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse(data.year(), formatTime);
-        form.setYear(date);
+
+        var currentYear = data.year();
+        var day = LocalDate.now().getDayOfMonth();
+        var month = LocalDate.now().getMonthValue();
+
+        LocalDate dateCompleted = LocalDate.of(2025, 12, 12);
+//
+//        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        LocalDate date = LocalDate.parse(dateCompleted, formatTime);
+        System.out.println(data.year());
+        form.setYear(data.year());
         form.setTitle(data.title());
-        form.setValidation(form.getYear().plusYears(1));
+        form.setValidation(form.getYear() + 1);
         formRepository.save(form);
    
         List<QuestionsByIdDto> questions = new ArrayList<>();
