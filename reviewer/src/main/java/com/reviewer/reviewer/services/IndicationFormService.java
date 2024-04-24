@@ -44,7 +44,6 @@ public class IndicationFormService {
                 throw new NoSuchElementException("You repeated a user id in your indications! ");
             }
             else {
-                System.out.println("nao repetiu");
                 indicatedRepository.save(indicated);
                 indicationFormRepository.save(indication);
                 indicationUser.add(indication);
