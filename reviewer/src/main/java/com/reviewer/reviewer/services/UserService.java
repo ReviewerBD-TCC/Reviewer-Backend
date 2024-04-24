@@ -1,5 +1,4 @@
 package com.reviewer.reviewer.services;
-import com.reviewer.reviewer.dto.users.UserDetailsResponseDto;
 import com.reviewer.reviewer.dto.users.UserResponseDto;
 import com.reviewer.reviewer.models.User;
 import com.reviewer.reviewer.repositories.UserRepository;
@@ -37,9 +36,9 @@ public class UserService implements UserDetailsService {
         return userDto;
     }
 
-    public UserDetailsResponseDto findMe(Principal principal) {
+    public UserResponseDto findMe(Principal principal) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        return new UserDetailsResponseDto(user);
+        return new UserResponseDto(user);
     }
 
 }
