@@ -2,9 +2,6 @@ package com.reviewer.reviewer.dto.forms;
 
 
 import java.time.LocalDate;
-import java.util.List;
-
-import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.models.QuestionForm;
 
 
