@@ -1,8 +1,5 @@
 package com.reviewer.reviewer.services;
-import com.reviewer.reviewer.models.Question;
 import com.reviewer.reviewer.models.QuestionAnswer;
-import com.reviewer.reviewer.models.QuestionForm;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerFindAllDto;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerResponseDto;
-import com.reviewer.reviewer.dto.questions.QuestionDto;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.infra.validation.Validation;
 import com.reviewer.reviewer.repositories.QuestionAnswerRepository;
