@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
@@ -32,30 +33,25 @@ public class FormService {
     @Autowired
     private QuestionRepository questionRepository;
 
+    public QuestionFormCreatedDto create(QuestionFormListDto data) {
 
-    public QuestionFormCreatedDto create(QuestionFormListDto data){
         var form = new Form();
-
-        var currentYear = data.year();
-        var day = LocalDate.now().getDayOfMonth();
-        var month = LocalDate.now().getMonthValue();
-
-        LocalDate dateCompleted = LocalDate.of(2025, 12, 12);
-//
-//        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        LocalDate date = LocalDate.parse(dateCompleted, formatTime);
-        System.out.println(data.year());
-        form.setYear(data.year());
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        var today = LocalDate.now();
+        var date = LocalDate.of(data.year(), today.getMonthValue(), today.getDayOfMonth());
+        String formart = date.format(formatTime);
+        LocalDate formattedDate = LocalDate.parse(formart, formatTime);
+        form.setYear(formattedDate);
         form.setTitle(data.title());
-        form.setValidation(form.getYear() + 1);
+        form.setValidation(form.getYear().plusYears(1));
         formRepository.save(form);
-   
-        List<QuestionResponseDto> questions = new ArrayList<>();
-      
 
-        for(int i =0; i < data.questionsId().size(); i++){
+        List<QuestionResponseDto> questions = new ArrayList<>();
+
+        for (int i = 0; i < data.questionsId().size(); i++) {
             var questionById = questionRepository.findById(data.questionsId().get(i).longValue());
-            if(questionById.isEmpty()) throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+            if (questionById.isEmpty())
+                throw new ResponseStatusException(HttpStatusCode.valueOf(404));
             var formQuestion = new QuestionForm(form, questionById.get());
             questionFormRepository.save(formQuestion);
             var questionDto = new QuestionResponseDto(questionById.get());
@@ -64,18 +60,19 @@ public class FormService {
         return new QuestionFormCreatedDto(form.getId(), form.getTitle(), questions, form.getYear());
 
     }
+
     public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
-		var formQuestions = questionFormRepository.findAllByFormId(formId);
-		List<QuestionFormResponseDto>questionFormResponseDtos = new ArrayList<>();
+        var formQuestions = questionFormRepository.findAllByFormId(formId);
+        List<QuestionFormResponseDto> questionFormResponseDtos = new ArrayList<>();
 
         if (formQuestions.isEmpty()) {
             throw new NoSuchElementException("Id form: " + formId + " not found");
         }
         for (QuestionForm formQuestion : formQuestions) {
-			var entity = new QuestionFormResponseDto(formQuestion);
+            var entity = new QuestionFormResponseDto(formQuestion);
             questionFormResponseDtos.add(entity);
-		}
-		return questionFormResponseDtos;
-		}
-    
+        }
+        return questionFormResponseDtos;
+    }
+
 }
