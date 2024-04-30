@@ -38,7 +38,7 @@ public class FormService {
         var form = new Form();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         var today = LocalDate.now();
-        var date = LocalDate.of(data.year(), today.getMonthValue(), today.getDayOfMonth());
+        var date = LocalDate.of(Integer.parseInt(data.year()), today.getMonthValue(), today.getDayOfMonth());
         String formart = date.format(formatTime);
         LocalDate formattedDate = LocalDate.parse(formart, formatTime);
         form.setYear(formattedDate);
