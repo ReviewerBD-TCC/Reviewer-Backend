@@ -1,5 +1,5 @@
 package com.reviewer.reviewer.services;
-import com.reviewer.reviewer.dto.users.UserDetailsResponseDto;
+import com.reviewer.reviewer.dto.users.UserResponseDto;
 import com.reviewer.reviewer.models.User;
 import com.reviewer.reviewer.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +24,20 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<UserDetailsResponseDto> findAll(){
+    public List<UserResponseDto> findAll(){
         var users = repository.findAll();
-        List<UserDetailsResponseDto> userDto = new ArrayList<>();
+        List<UserResponseDto> userDto = new ArrayList<>();
         for (User user : users) {
-            var userResponse = new UserDetailsResponseDto(user);
+            var userResponse = new UserResponseDto(user);
             userDto.add(userResponse);
         }
 
         return userDto;
     }
 
-    public UserDetailsResponseDto findMe(Principal principal) {
+    public UserResponseDto findMe(Principal principal) {
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        return new UserDetailsResponseDto(user);
+        return new UserResponseDto(user);
     }
 
 }
