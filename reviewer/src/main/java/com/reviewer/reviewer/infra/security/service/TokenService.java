@@ -92,9 +92,17 @@ public class TokenService {
 
 
     public User register(RegisterDto data){
+
+        User existingUser = repository.findByEmailOrUser(data.email(), data.user());
+
+        if (existingUser != null) {
+            throw new IllegalArgumentException("Um usuário com este e-mail ou nome de usuário já existe.");
+        }
+
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
         var user = new User(data);
+
         user.setPassword(encryptedPassword);
         repository.save(user);
 
