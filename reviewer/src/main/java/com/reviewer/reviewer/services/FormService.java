@@ -33,31 +33,41 @@ public class FormService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public QuestionFormCreatedDto create(QuestionFormListDto data) {
+    public QuestionFormListDto create(QuestionFormCreatedDto data) {
 
         var form = new Form();
+
+        System.out.println(data.year());
+
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         var today = LocalDate.now();
-        var date = LocalDate.of(Integer.parseInt(data.year()), today.getMonthValue(), today.getDayOfMonth());
-        String formart = date.format(formatTime);
-        LocalDate formattedDate = LocalDate.parse(formart, formatTime);
+        LocalDate year = data.year();
+        var date = LocalDate.of(year.getYear(), today.getMonthValue(), today.getDayOfMonth());
+        String format = date.format(formatTime);
+        LocalDate formattedDate = LocalDate.parse(format, formatTime);
+
         form.setYear(formattedDate);
         form.setTitle(data.title());
         form.setValidation(form.getYear().plusYears(1));
+
         formRepository.save(form);
 
         List<QuestionResponseDto> questions = new ArrayList<>();
 
-        for (int i = 0; i < data.questionsId().size(); i++) {
-            var questionById = questionRepository.findById(data.questionsId().get(i).longValue());
-            if (questionById.isEmpty())
+        for (int i = 0; i < data.questions().size(); i++) {
+
+            var questionById = questionRepository.findById(data.questions().get(i).question());
+
+            if (questionById.isEmpty()) {
                 throw new ResponseStatusException(HttpStatusCode.valueOf(404));
+            }
+
             var formQuestion = new QuestionForm(form, questionById.get());
             questionFormRepository.save(formQuestion);
             var questionDto = new QuestionResponseDto(questionById.get());
             questions.add(questionDto);
         }
-        return new QuestionFormCreatedDto(form.getId(), form.getTitle(), questions, form.getYear());
+        return new QuestionFormListDto(form.getId(), form.getTitle(), form.getYear(), questions);
 
     }
 
