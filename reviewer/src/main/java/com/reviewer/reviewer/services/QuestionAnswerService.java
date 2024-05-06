@@ -26,8 +26,6 @@ public class QuestionAnswerService {
 
     @Autowired
     private QuestionFormRepository questionFormRepository;
-    
-
 
     public QuestionAnswerResponseDto create(QuestionAnswerDto data) {
        
