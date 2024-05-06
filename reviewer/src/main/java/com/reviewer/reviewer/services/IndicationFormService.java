@@ -1,4 +1,5 @@
 package com.reviewer.reviewer.services;
+import com.reviewer.reviewer.dto.email.EmailRecordDto;
 import com.reviewer.reviewer.dto.forms.*;
 
 import com.reviewer.reviewer.models.IndicationForm;
@@ -25,6 +26,9 @@ public class IndicationFormService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    public EmailService emailService;
+
     public IndicationFormResponseDto create(@Valid IndicationFormDto form){
 
         var user = userRepository.findById(form.userIndication());
@@ -47,14 +51,21 @@ public class IndicationFormService {
                 indicatedRepository.save(indicated);
                 indicationFormRepository.save(indication);
                 indicationUser.add(indication);
-            }
-
-            
+            } 
           
         }
 
         List<IndicatedResponseDto> indicatedResponseDtos = IndicatedResponseDto.fromIndicatedList(indicatedList);
-
+        int index = 0;
+        String[] indicateds = new String[form.indicateds().size()];
+        for (Indicated indicated : indicatedList) {
+            System.out.println(form.indicateds());
+            indicateds[index] = indicated.getUserIndicated().getEmail();
+            index+=1;
+        };
+    
+        var email = new EmailRecordDto(null, "Feedback.BDXD-BR@br.bosch.com",indicateds , null, "Disparo de indicações Email!", "Clique no link abaixo para responder o formulário!\nhttp://10.234.84.188/form");
+        emailService.sendMail(email);
 
         IndicationForm lastIndication = indicationUser.get(indicationUser.size() - 1);
         IndicationFormResponseDto responseDto = new IndicationFormResponseDto(lastIndication, user.get(), indicatedResponseDtos);
