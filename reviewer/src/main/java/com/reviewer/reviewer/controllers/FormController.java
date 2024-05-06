@@ -33,7 +33,7 @@ public class FormController {
     @PostMapping
     @Transactional
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<QuestionFormCreatedDto> createForm(@RequestBody @Valid QuestionFormListDto data){
+    public ResponseEntity<QuestionFormListDto> createForm(@RequestBody @Valid QuestionFormCreatedDto data){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
 
     }
