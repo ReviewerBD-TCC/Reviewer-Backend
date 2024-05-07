@@ -33,9 +33,8 @@ public class Question {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<QuestionForm> questionForms;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "answer_id")
-    private QuestionAnswer answer;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<QuestionAnswer> answer;
     
     private Boolean active;
 
