@@ -84,4 +84,17 @@ public class FormService {
         }
         return questionFormResponseDtos;
     }
+    public List<QuestionFormResponseDto> findAll(){
+        var forms = questionFormRepository.findAll();
+        List<QuestionFormResponseDto> formsDto = new ArrayList<>();
+        List<QuestionResponseDto> questions = new ArrayList<>();
+        forms.forEach(each->{
+            var question = new QuestionResponseDto(each.getQuestion());
+            questions.add(question);
+            var questionForm = new QuestionFormResponseDto(each);
+            formsDto.add(questionForm);
+        });
+        return formsDto;
+      
+    }
 }
