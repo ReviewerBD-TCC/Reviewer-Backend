@@ -11,12 +11,12 @@ public record Validation (QuestionAnswerDto data){
 
 
     public User UserNotFound(UserRepository repository){
-        var user = repository.findById(data.userId());
+        var user = repository.findById(data.questionAnswer().get(0).answer().userId());
         return user.get();
     }
-    public List<QuestionForm> FormQuestionNotFound(QuestionFormRepository repository){
-        var questionForm = repository.findAllByFormId(data.questionFormId());
-        return questionForm;
+    public QuestionForm FormQuestionNotFound(QuestionFormRepository repository){
+        var questionForm = repository.findById(data.questionFormId());
+        return questionForm.get();
     }
   
    
