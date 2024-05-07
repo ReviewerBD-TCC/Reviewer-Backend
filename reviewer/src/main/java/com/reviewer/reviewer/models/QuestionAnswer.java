@@ -1,4 +1,6 @@
 package com.reviewer.reviewer.models;
+import com.reviewer.reviewer.dto.questions.QuestionAndAnswerDto;
+import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,12 +27,19 @@ public class QuestionAnswer{
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "questionForm_id")
     private QuestionForm questionForm;
 
-    @OneToOne(mappedBy = "answer", cascade = CascadeType.ALL)
-    private Question question; // Question é o dono da relação
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 
     private String answer;
 
+    public QuestionAnswer(QuestionAndAnswerDto data, User user, Question question, QuestionForm questionForm) {
+        this.user = user;
+        this.questionForm = questionForm;
+        this.question = question;
+        this.answer = data.answer().answer();
+    }
 }
