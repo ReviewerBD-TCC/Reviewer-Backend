@@ -1,13 +1,28 @@
 package com.reviewer.reviewer.dto.questions;
-import java.util.List;
-
 import com.reviewer.reviewer.models.QuestionAnswer;
 
+import java.util.ArrayList;
+import java.util.List;
 
+public record QuestionAnswerResponseDto(
+        Long id,
+        Long questionFormId,
+        Long userId,
+        QuestionResponseDto question,
+        String answer
+) {
+    public QuestionAnswerResponseDto(QuestionAnswer questionAnswer, QuestionResponseDto question) {
+        this(questionAnswer.getId(), questionAnswer.getQuestionForm().getId(), questionAnswer.getUser().getId(), question, questionAnswer.getAnswer());
+    }
 
-public record QuestionAnswerResponseDto(Long id, Long userId, String name, String questionPt,String questionEn, List<QuestionResponseDto> questions, List<String> answers) {
-    public QuestionAnswerResponseDto(QuestionAnswer data,List<QuestionResponseDto> questions, List<String> answers){
-        this(data.getId(), data.getUser().getId(), data.getUser().getName(), data.getQuestionForm().getQuestion().getQuestionPt(),data.getQuestionForm().getQuestion().getQuestionPt(),questions, answers);
-    };
-    
+    public static List<QuestionAnswerResponseDto> fromQuestionAnswerList(List<QuestionAnswer> answerList){
+        List<QuestionAnswerResponseDto> dtos = new ArrayList<>();
+
+        for(QuestionAnswer answer : answerList){
+            var question = new QuestionResponseDto(answer.getQuestion());
+            dtos.add(new QuestionAnswerResponseDto(answer.getId(), answer.getQuestionForm().getId(), answer.getUser().getId(), question, answer.getAnswer()));
+        }
+
+        return dtos;
+    }
 }

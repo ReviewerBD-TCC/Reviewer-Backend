@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity(name = "question_form")
 @Table(name = "question_forms")
@@ -26,6 +28,9 @@ public class QuestionForm{
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+
+    @OneToMany(mappedBy = "questionForm", cascade = CascadeType.ALL)
+    private List<QuestionAnswer> questionAnswer;
 
     public QuestionForm(Form form, Question question) {
         this.form = form;

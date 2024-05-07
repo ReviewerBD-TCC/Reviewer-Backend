@@ -2,8 +2,13 @@ package com.reviewer.reviewer.dto.questions;
 
 import jakarta.validation.constraints.NotNull;
 
-public record QuestionIdDto (
+public record AnswerDto(
         @NotNull
-        Long question
+        Long userId,
+
+        @NotNull
+        String answer
 ) {
+
+
 }

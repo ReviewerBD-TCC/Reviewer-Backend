@@ -1,16 +1,15 @@
 package com.reviewer.reviewer.dto.questions;
 import jakarta.validation.constraints.NotNull;
 
-public record QuestionAnswerDto (
+import java.util.List;
 
-        @NotNull
-        Long userId,
+public record QuestionAnswerDto (
 
         @NotNull
         Long questionFormId,
 
-      
-        String []answers
+        List<QuestionAndAnswerDto> questionAnswer
+
 ){
-    
+
 }
