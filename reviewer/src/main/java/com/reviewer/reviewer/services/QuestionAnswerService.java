@@ -81,8 +81,6 @@ public class QuestionAnswerService {
         if (data.questionAnswer() == null || data.questionAnswer().isEmpty()) {
             throw new IllegalArgumentException("The questionAnswer list is empty or null.");
         }
-
-        // Itera sobre as perguntas do questionForm e imprime suas IDs
         for (var question : questionForms) {
             System.out.println("Question ID: " + question.getQuestion().getQuestionPt());
         }
@@ -92,11 +90,8 @@ public class QuestionAnswerService {
             var answerText = item.answer().answer();
             var question = questionRepository.findById(questionId)
                     .orElseThrow(() -> new NoSuchElementException("Question not found!"));
-
-            // Obter o questionForm correspondente ao questionId
             var questionForm = question.getQuestionForms();
 
-            // Verificar se há pelo menos um questionForm associado à pergunta
             if (questionForm.isEmpty()) {
                 throw new NoSuchElementException("QuestionForm not found for question: " + questionId);
             }
