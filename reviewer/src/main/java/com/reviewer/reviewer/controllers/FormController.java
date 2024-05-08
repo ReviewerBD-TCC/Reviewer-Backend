@@ -43,4 +43,10 @@ public class FormController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.listFormQuestion(formId));
 
     }
+    @GetMapping
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<QuestionFormResponseDto>> findAll(){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.findAll());
+
+    }
 }
