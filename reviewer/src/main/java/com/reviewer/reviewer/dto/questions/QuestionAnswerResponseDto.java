@@ -20,7 +20,7 @@ public record QuestionAnswerResponseDto(
 
         for(QuestionAnswer answer : answerList){
             var question = new QuestionResponseDto(answer.getQuestion());
-            dtos.add(new QuestionAnswerResponseDto(answer.getId(), answer.getQuestionForm().getId(), answer.getUser().getId(), question, answer.getAnswer()));
+            dtos.add(new QuestionAnswerResponseDto(answer.getId(), answer.getQuestionForm().getForm().getId(), answer.getUser().getId(), question, answer.getAnswer()));
         }
 
         return dtos;
