@@ -2,9 +2,7 @@ package com.reviewer.reviewer.services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.models.QuestionForm;
@@ -73,17 +71,27 @@ public class FormService {
 
     public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
         var formQuestions = questionFormRepository.findAllByFormId(formId);
-        List<QuestionFormResponseDto> questionFormResponseDtos = new ArrayList<>();
 
         if (formQuestions.isEmpty()) {
-            throw new NoSuchElementException("Id form: " + formId + " not found");
+            throw new NoSuchElementException("Form ID " + formId + " not found.");
         }
-        for (QuestionForm formQuestion : formQuestions) {
-            var entity = new QuestionFormResponseDto(formQuestion);
-            questionFormResponseDtos.add(entity);
+
+        // Para evitar duplicatas, use um Set para manter registros únicos
+        Set<Long> uniqueFormIds = new HashSet<>();
+        List<QuestionFormResponseDto> questionFormResponseDtos = new ArrayList<>();
+
+        // Para cada `QuestionForm`, cria um `QuestionFormResponseDto`
+        for (var formQuestion : formQuestions) {
+            if (!uniqueFormIds.contains(formQuestion.getForm().getId())) {
+                uniqueFormIds.add(formQuestion.getForm().getId());
+                var responseDto = new QuestionFormResponseDto(formQuestion);
+                questionFormResponseDtos.add(responseDto);
+            }
         }
-        return questionFormResponseDtos;
+
+        return questionFormResponseDtos; // Retorna a lista de DTOs
     }
+
     public List<QuestionFormResponseDto> findAll(){
         var forms = questionFormRepository.findAll();
         List<QuestionFormResponseDto> formsDto = new ArrayList<>();
