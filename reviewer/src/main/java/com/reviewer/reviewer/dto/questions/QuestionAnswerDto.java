@@ -8,6 +8,9 @@ public record QuestionAnswerDto (
         @NotNull
         Long questionFormId,
 
+        @NotNull
+        Long userId,
+
         List<QuestionAndAnswerDto> questionAnswer
 
 ){

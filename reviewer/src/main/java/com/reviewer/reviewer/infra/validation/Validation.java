@@ -11,7 +11,7 @@ public record Validation (QuestionAnswerDto data){
 
 
     public User UserNotFound(UserRepository repository){
-        var user = repository.findById(data.questionAnswer().get(0).answer().userId());
+        var user = repository.findById(data.userId());
         return user.get();
     }
     public QuestionForm FormQuestionNotFound(QuestionFormRepository repository){
