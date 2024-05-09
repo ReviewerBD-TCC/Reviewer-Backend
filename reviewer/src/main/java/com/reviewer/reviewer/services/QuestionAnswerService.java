@@ -77,7 +77,6 @@ public class QuestionAnswerService {
         var questionForms = validation.QuestionFormNotFound(questionFormRepository);
         var user = validation.UserNotFound(userRepository);
         List<QuestionAnswer> answerResponseDtos = new ArrayList<>();
-        int i;
         if (data.questionAnswer() == null || data.questionAnswer().isEmpty()) {
             throw new IllegalArgumentException("The questionAnswer list is empty or null.");
         }
