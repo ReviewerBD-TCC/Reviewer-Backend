@@ -4,6 +4,7 @@ import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.models.QuestionAnswer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.reviewer.reviewer.repositories.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,27 +35,31 @@ public class QuestionAnswerService {
 
     public List<QuestionAnswerResponseDto> create(QuestionAnswerDto data) {
         Validation validation = new Validation(data);
-        var questionForm = validation.FormQuestionNotFound(questionFormRepository);
+        var questionForms = validation.QuestionFormNotFound(questionFormRepository);
         var user = validation.UserNotFound(userRepository);
-
         List<QuestionAnswer> answerResponseDtos = new ArrayList<>();
-
         if (data.questionAnswer() == null || data.questionAnswer().isEmpty()) {
             throw new IllegalArgumentException("The questionAnswer list is empty or null.");
+        }
+        for (var question : questionForms) {
+            System.out.println("Question ID: " + question.getQuestion().getQuestionPt());
         }
 
         for (var item : data.questionAnswer()) {
             var questionId = item.question();
             var answerText = item.answer().answer();
-
-            System.out.println("Question ID: " + questionId);
-
             var question = questionRepository.findById(questionId)
-                    .orElseThrow(() -> new EntityNotFoundException("Question not found"));
+                    .orElseThrow(() -> new NoSuchElementException("Question not found!"));
+            var questionForm = question.getQuestionForms();
 
+            if (questionForm.isEmpty()) {
+                throw new NoSuchElementException("QuestionForm not found for question: " + questionId);
+            }
+
+            System.out.println("QuestionForm: " + questionForm.get(0).getForm().getId());
             System.out.println("Question do banco: " + question.getId());
 
-            var questionAnswer = new QuestionAnswer(item, user, question, questionForm);
+            var questionAnswer = new QuestionAnswer(item, user, question, questionForm.get(0));
             questionAnswer.setAnswer(answerText);
 
             answerResponseDtos.add(questionAnswer);
