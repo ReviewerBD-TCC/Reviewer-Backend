@@ -95,14 +95,16 @@ public class FormService {
     public List<QuestionFormResponseDto> findAll(){
         var forms = questionFormRepository.findAll();
         List<QuestionFormResponseDto> formsDto = new ArrayList<>();
-        List<QuestionResponseDto> questions = new ArrayList<>();
-        forms.forEach(each->{
-            var question = new QuestionResponseDto(each.getQuestion());
-            questions.add(question);
-            var questionForm = new QuestionFormResponseDto(each);
-            formsDto.add(questionForm);
-        });
+
+        for (QuestionForm form : forms) {
+
+            boolean exists = formsDto.stream().anyMatch(dto -> dto.id().equals(form.getForm().getId()));
+            if (!exists) {
+                QuestionFormResponseDto questionFormDto = new QuestionFormResponseDto(form);
+                formsDto.add(questionFormDto);
+            }
+        }
+
         return formsDto;
-      
     }
 }
