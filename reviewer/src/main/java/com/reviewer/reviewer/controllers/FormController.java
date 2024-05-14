@@ -40,13 +40,13 @@ public class FormController {
     @GetMapping("/{formId}")
     @Secured("ROLE_ADMIN")
     public ResponseEntity<List<QuestionFormResponseDto>> listFormQuestion(@PathVariable(name = "formId") Long formId){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.listFormQuestion(formId));
+        return ResponseEntity.status(HttpStatus.OK).body(service.listFormQuestion(formId));
 
     }
     @GetMapping
     @Secured("ROLE_ADMIN")
     public ResponseEntity<List<QuestionFormResponseDto>> findAll(){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
 
     }
 }
