@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
 import com.reviewer.reviewer.models.Form;
 import com.reviewer.reviewer.repositories.FormRepository;
+import com.reviewer.reviewer.repositories.QuestionAnswerRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
 import com.reviewer.reviewer.repositories.QuestionRepository;
 
@@ -30,6 +30,9 @@ public class FormService {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private QuestionAnswerRepository questionAnswerRepository;
 
     public QuestionFormListDto create(QuestionFormCreatedDto data) {
 
@@ -92,7 +95,7 @@ public class FormService {
         return questionFormResponseDtos; // Retorna a lista de DTOs
     }
 
-    public List<QuestionFormResponseDto> findAll(){
+    public List<QuestionFormResponseDto> findAll() {
         var forms = questionFormRepository.findAll();
         List<QuestionFormResponseDto> formsDto = new ArrayList<>();
 
@@ -107,4 +110,29 @@ public class FormService {
 
         return formsDto;
     }
+
+    public void deleteForm(Long id) {
+        var form = formRepository.findById(id);
+        var questionForm = questionFormRepository.findAllByFormId(id);
+        var questionsAnswers = questionAnswerRepository.findAll();
+
+        if (form.isEmpty()) {
+            throw new NoSuchElementException("Form not found!");
+        } else {
+            formRepository.delete(form.get());
+            questionForm.forEach(eachQuestionForm -> {
+                if (eachQuestionForm.getForm().equals(form.get())) {
+                    questionFormRepository.delete(eachQuestionForm);
+                }
+            });
+            questionsAnswers.forEach(each -> {
+                if (each.getQuestionForm().getForm().equals(form.get())) {
+                    questionAnswerRepository.delete(each);
+                }
+            });
+        
+    }
 }
+
+}
+
