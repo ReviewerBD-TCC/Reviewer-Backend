@@ -5,9 +5,7 @@ import com.reviewer.reviewer.models.QuestionAnswer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import com.reviewer.reviewer.repositories.QuestionRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
@@ -35,9 +33,12 @@ public class QuestionAnswerService {
 
     public List<QuestionAnswerResponseDto> create(QuestionAnswerDto data) {
         Validation validation = new Validation(data);
+
         var questionForms = validation.QuestionFormNotFound(questionFormRepository);
         var user = validation.UserNotFound(userRepository);
+
         List<QuestionAnswer> answerResponseDtos = new ArrayList<>();
+
         if (data.questionAnswer() == null || data.questionAnswer().isEmpty()) {
             throw new IllegalArgumentException("The questionAnswer list is empty or null.");
         }
@@ -50,16 +51,14 @@ public class QuestionAnswerService {
             var answerText = item.answer().answer();
             var question = questionRepository.findById(questionId)
                     .orElseThrow(() -> new NoSuchElementException("Question not found!"));
-            var questionForm = question.getQuestionForms();
 
-            if (questionForm.isEmpty()) {
+            var questionFormPrin = questionFormRepository.findByFormId(data.questionFormId());
+
+            if (questionFormPrin.isEmpty()) {
                 throw new NoSuchElementException("QuestionForm not found for question: " + questionId);
             }
 
-            System.out.println("QuestionForm: " + questionForm.get(0).getForm().getId());
-            System.out.println("Question do banco: " + question.getId());
-
-            var questionAnswer = new QuestionAnswer(item, user, question, questionForm.get(0));
+            var questionAnswer = new QuestionAnswer(item, user, question, questionFormPrin.get(0));
             questionAnswer.setAnswer(answerText);
 
             answerResponseDtos.add(questionAnswer);
