@@ -8,13 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.reviewer.reviewer.dto.forms.FormDeleteDto;
+import com.reviewer.reviewer.dto.forms.FormUpdateDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
@@ -57,6 +58,13 @@ public class FormController {
     public ResponseEntity<?> deleteForm(@PathVariable(name = "formId") Long formId){
         service.deleteForm(formId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+    }
+    @PatchMapping("/{formId}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<String> updateForm(@PathVariable(name = "formId") Long formId, @RequestBody @Valid FormUpdateDto data){
+        service.updateForm(formId, data);
+        return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 }
