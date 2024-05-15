@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QuestionFormRepository extends JpaRepository<QuestionForm, Long> {
     List<QuestionForm> findAllByFormId(Long formId);
+
+    List<QuestionForm> findByFormId(Long id);
 }
