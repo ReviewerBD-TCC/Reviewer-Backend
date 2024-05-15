@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.reviewer.reviewer.dto.forms.FormUpdateDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
@@ -109,6 +111,27 @@ public class FormService {
         }
 
         return formsDto;
+    }
+    public void updateForm(Long id, FormUpdateDto data){
+        var form = formRepository.findById(id);
+        var questionForms = questionFormRepository.findAllByFormId(id);
+       
+        if (form.isEmpty()) {
+            throw new NoSuchElementException("Form not found!");
+        } 
+        for (QuestionForm questionForm : questionForms) {
+            if(questionForm.getForm().equals(form.get())){
+                if(questionForm.getQuestion().getId().equals(data.questionId())){
+                    var question = questionRepository.findById(data.newQuestionId());
+                    questionForm.setQuestion(question.get());
+                    questionFormRepository.save(questionForm);
+                    
+                }
+                
+                
+            }
+        }
+
     }
 
     public void deleteForm(Long id) {
