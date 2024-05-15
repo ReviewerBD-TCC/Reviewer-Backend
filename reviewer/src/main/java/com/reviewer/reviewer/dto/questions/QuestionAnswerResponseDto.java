@@ -12,7 +12,7 @@ public record QuestionAnswerResponseDto(
         String answer
 ) {
     public QuestionAnswerResponseDto(QuestionAnswer questionAnswer, QuestionResponseDto question) {
-        this(questionAnswer.getId(), questionAnswer.getQuestionForm().getId(), questionAnswer.getUser().getId(), question, questionAnswer.getAnswer());
+        this(questionAnswer.getId(), questionAnswer.getQuestionForm().getForm().getId(), questionAnswer.getUser().getId(), question, questionAnswer.getAnswer());
     }
 
     public static List<QuestionAnswerResponseDto> fromQuestionAnswerList(List<QuestionAnswer> answerList){
@@ -20,7 +20,7 @@ public record QuestionAnswerResponseDto(
 
         for(QuestionAnswer answer : answerList){
             var question = new QuestionResponseDto(answer.getQuestion());
-            dtos.add(new QuestionAnswerResponseDto(answer.getId(), answer.getQuestionForm().getId(), answer.getUser().getId(), question, answer.getAnswer()));
+            dtos.add(new QuestionAnswerResponseDto(answer.getId(), answer.getQuestionForm().getForm().getId(), answer.getUser().getId(), question, answer.getAnswer()));
         }
 
         return dtos;
