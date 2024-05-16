@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.reviewer.reviewer.dto.forms.FormUpdateDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
 import com.reviewer.reviewer.models.Form;
+import com.reviewer.reviewer.models.Question;
 import com.reviewer.reviewer.repositories.FormRepository;
 import com.reviewer.reviewer.repositories.QuestionAnswerRepository;
 import com.reviewer.reviewer.repositories.QuestionFormRepository;
@@ -109,6 +112,36 @@ public class FormService {
         }
 
         return formsDto;
+    }
+    public <T> Object updateForm(Long id, FormUpdateDto data){
+        var form = formRepository.findById(id);
+        var questionForms = questionFormRepository.findAllByFormId(id);
+        var questions = new ArrayList<>();
+        var question = questionRepository.findById(data.questionId());
+        if (form.isEmpty()) {
+            throw new NoSuchElementException("Form not found!");
+        } 
+        
+        for (QuestionForm questionForm : questionForms) {
+            if(questionForm.getForm().equals(form.get())){
+                questions.add(questionForm.getQuestion());
+                if(questionForm.getQuestion().equals(question.get())){
+                    var newQuestion = questionRepository.findById(data.newQuestionId());
+                    questionForm.setQuestion(newQuestion.get());
+                    questionFormRepository.save(questionForm);   
+                }
+            }
+        }
+        if(!questions.contains(question.get())){
+            throw new NoSuchElementException("Question id "+question.get().getId()+" is not relationated with a form id "+id+"!");
+        }
+        if(data.title() != null){
+            form.get().setTitle(data.title());
+            formRepository.save(form.get());
+        }
+       
+
+        return null;
     }
 
     public void deleteForm(Long id) {
