@@ -62,9 +62,9 @@ public class FormController {
     }
     @PatchMapping("/{formId}")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> updateForm(@PathVariable(name = "formId") Long formId, @RequestBody @Valid FormUpdateDto data){
+    public ResponseEntity<?> updateForm(@PathVariable(name = "formId") Long formId, @RequestBody @Valid FormUpdateDto data){
         service.updateForm(formId, data);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body("Form edited successfully!");
 
     }
 }
