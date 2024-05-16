@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.models.QuestionForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,32 +42,34 @@ public class FormService {
     public QuestionFormListDto create(QuestionFormCreatedDto data) {
 
         var form = new Form();
-
-        System.out.println(data.year());
-
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         var today = LocalDate.now();
         LocalDate year = data.year();
         var date = LocalDate.of(year.getYear(), today.getMonthValue(), today.getDayOfMonth());
         String format = date.format(formatTime);
         LocalDate formattedDate = LocalDate.parse(format, formatTime);
-
         form.setYear(formattedDate);
         form.setTitle(data.title());
         form.setValidation(form.getYear().plusYears(1));
-
         formRepository.save(form);
-
         List<QuestionResponseDto> questions = new ArrayList<>();
 
         for (int i = 0; i < data.questions().size(); i++) {
-
+            long eachQuestionId = data.questions().get(i).question();
+            var before = data.questions().get(i).question();
+            for(int j = 0; j < i; j++){
+                var next = data.questions().get(j).question();
+                if(next.equals(before)){
+                    throw new IllegalArgumentException("Question id "+eachQuestionId+" is duplicated!");
+                }
+            }
+            if(eachQuestionId <= 0){
+                throw new NoSuchElementException("Question id "+eachQuestionId+" not exists!");
+            }
             var questionById = questionRepository.findById(data.questions().get(i).question());
-
             if (questionById.isEmpty()) {
                 throw new ResponseStatusException(HttpStatusCode.valueOf(404));
             }
-
             var formQuestion = new QuestionForm(form, questionById.get());
             questionFormRepository.save(formQuestion);
             var questionDto = new QuestionResponseDto(questionById.get());
