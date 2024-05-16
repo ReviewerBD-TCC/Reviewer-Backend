@@ -57,14 +57,14 @@ public class FormService {
         for (int i = 0; i < data.questions().size(); i++) {
             long eachQuestionId = data.questions().get(i).question();
             var before = data.questions().get(i).question();
-            for(int j = 0; j < i; j++){
+            for (int j = 0; j < i; j++) {
                 var next = data.questions().get(j).question();
-                if(next.equals(before)){
-                    throw new IllegalArgumentException("Question id "+eachQuestionId+" is duplicated!");
+                if (next.equals(before)) {
+                    throw new IllegalArgumentException("Question id " + eachQuestionId + " is duplicated!");
                 }
             }
-            if(eachQuestionId <= 0){
-                throw new NoSuchElementException("Question id "+eachQuestionId+" not exists!");
+            if (eachQuestionId <= 0) {
+                throw new NoSuchElementException("Question id " + eachQuestionId + " not exists!");
             }
             var questionById = questionRepository.findById(data.questions().get(i).question());
             if (questionById.isEmpty()) {
@@ -114,36 +114,38 @@ public class FormService {
                 formsDto.add(questionFormDto);
             }
         }
-
         return formsDto;
     }
-    public <T> Object updateForm(Long id, FormUpdateDto data){
+
+    public <T> Object updateForm(Long id, FormUpdateDto data) {
         var form = formRepository.findById(id);
         var questionForms = questionFormRepository.findAllByFormId(id);
         var questions = new ArrayList<>();
-        var question = questionRepository.findById(data.questionId());
+
         if (form.isEmpty()) {
             throw new NoSuchElementException("Form not found!");
-        } 
-        
+        }
+        int index = 0;
         for (QuestionForm questionForm : questionForms) {
-            if(questionForm.getForm().equals(form.get())){
+            if (questionForm.getForm().equals(form.get())) {
+                var question = questionRepository.findById(data.newQuestion().get(index).questionId());
                 questions.add(questionForm.getQuestion());
-                if(questionForm.getQuestion().equals(question.get())){
-                    var newQuestion = questionRepository.findById(data.newQuestionId());
+                if (questionForm.getQuestion().equals(question.get())) {
+                    var newQuestion = questionRepository.findById(data.newQuestion().get(index).newQuestionId());
                     questionForm.setQuestion(newQuestion.get());
-                    questionFormRepository.save(questionForm);   
+                    questionFormRepository.save(questionForm);
+                } else {
+                    throw new NoSuchElementException("Question id " + question.get().getId()
+                            + " is not relationated with a form id " + id + "!");
                 }
             }
+            index += 1;
         }
-        if(!questions.contains(question.get())){
-            throw new NoSuchElementException("Question id "+question.get().getId()+" is not relationated with a form id "+id+"!");
-        }
-        if(data.title() != null){
+
+        if (data.title() != null) {
             form.get().setTitle(data.title());
             formRepository.save(form.get());
         }
-       
 
         return null;
     }
@@ -167,9 +169,8 @@ public class FormService {
                     questionAnswerRepository.delete(each);
                 }
             });
-        
+
+        }
     }
-}
 
 }
-
