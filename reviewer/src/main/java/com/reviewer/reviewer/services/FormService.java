@@ -120,33 +120,32 @@ public class FormService {
     public <T> Object updateForm(Long id, FormUpdateDto data) {
         var form = formRepository.findById(id);
         var questionForms = questionFormRepository.findAllByFormId(id);
-        var questions = new ArrayList<>();
-
         if (form.isEmpty()) {
             throw new NoSuchElementException("Form not found!");
         }
         int index = 0;
         for (QuestionForm questionForm : questionForms) {
+            boolean throwException = false;
             if (questionForm.getForm().equals(form.get())) {
-                var question = questionRepository.findById(data.newQuestion().get(index).questionId());
-                questions.add(questionForm.getQuestion());
-                if (questionForm.getQuestion().equals(question.get())) {
-                    var newQuestion = questionRepository.findById(data.newQuestion().get(index).newQuestionId());
+                var question = questionRepository.findById(data.newQuestions().get(index).questionId());
+                if (questionForm.getQuestion().getId().equals(question.get().getId())) {
+                    var newQuestion = questionRepository.findById(data.newQuestions().get(index).newQuestionId());
                     questionForm.setQuestion(newQuestion.get());
                     questionFormRepository.save(questionForm);
+                    if(index < data.newQuestions().size()) index+=1;
                 } else {
-                    throw new NoSuchElementException("Question id " + question.get().getId()
-                            + " is not relationated with a form id " + id + "!");
+                    throwException = true;
+                    if(throwException == true){
+                        throw new NoSuchElementException("Question id " + question.get().getId()
+                                + " is not relationated with form id " + id + "!");
+                    }
                 }
             }
-            index += 1;
         }
-
         if (data.title() != null) {
             form.get().setTitle(data.title());
             formRepository.save(form.get());
         }
-
         return null;
     }
 
@@ -169,8 +168,6 @@ public class FormService {
                     questionAnswerRepository.delete(each);
                 }
             });
-
         }
     }
-
 }

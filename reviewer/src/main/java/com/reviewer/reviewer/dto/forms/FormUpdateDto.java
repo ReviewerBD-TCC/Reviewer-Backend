@@ -1,5 +1,7 @@
 package com.reviewer.reviewer.dto.forms;
 
-public record FormUpdateDto(String title, Long questionId, Long newQuestionId){
+import java.util.List;
+
+public record FormUpdateDto(String title, List<NewQuestionFormUpdateDto> newQuestions){
 
 }
