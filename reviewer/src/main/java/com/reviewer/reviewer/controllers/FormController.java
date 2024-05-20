@@ -64,7 +64,7 @@ public class FormController {
     @Secured("ROLE_ADMIN")
     public ResponseEntity<?> updateForm(@PathVariable(name = "formId") Long formId, @RequestBody @Valid FormUpdateDto data){
         service.updateForm(formId, data);
-        return ResponseEntity.status(HttpStatus.OK).body("Form edited successfully!");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Form edited successfully!");
 
     }
 }

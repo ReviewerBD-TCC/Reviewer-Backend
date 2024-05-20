@@ -132,10 +132,12 @@ public class FormService {
                     var newQuestion = questionRepository.findById(data.newQuestions().get(index).newQuestionId());
                     questionForm.setQuestion(newQuestion.get());
                     questionFormRepository.save(questionForm);
-                    if(index < data.newQuestions().size()) index+=1;
+                    if(index < data.newQuestions().size() && data.newQuestions().size()>1){
+                        index+=1;
+                    }
                 } else {
                     throwException = true;
-                    if(throwException == true){
+                    if(throwException == true && questionForm.getQuestion().equals(question.get())){
                         throw new NoSuchElementException("Question id " + question.get().getId()
                                 + " is not relationated with form id " + id + "!");
                     }
