@@ -25,6 +25,7 @@ public class EmailController {
 	
 	@PostMapping
 	public ResponseEntity<?> sendEmail(@RequestBody EmailRecordDto data){
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.sendMail(data));
+		service.sendMail(data);
+		return ResponseEntity.status(HttpStatus.CREATED).body("Email sent successfully!");
 	}
 }
