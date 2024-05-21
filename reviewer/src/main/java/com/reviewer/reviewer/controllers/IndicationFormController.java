@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.UnknownHostException;
+
 
 @RestController
 @CrossOrigin( origins = "*")
@@ -33,7 +35,7 @@ public class IndicationFormController {
     @PostMapping
     @Transactional
    
-    public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder) throws UnknownHostException {
 
         var userIndication = userRepository.findById(data.userIndication());
         var indicationForm = new IndicationForm(userIndication.get());
