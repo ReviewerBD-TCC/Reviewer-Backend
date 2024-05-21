@@ -92,5 +92,19 @@ public class QuestionAnswerService {
 
         return answersDto;
    }
+    public List<QuestionAnswerResponseDto> findAllByQuestionId(Long id){
+
+        var answer = questionAnswerRepository.findAllByQuestionId(id);
+
+        List<QuestionAnswerResponseDto> answersDto = new ArrayList<>();
+
+        for (QuestionAnswer questionAnswer : answer) {
+            var question = new QuestionResponseDto(questionAnswer.getQuestion());
+            var answerDto = new QuestionAnswerResponseDto(questionAnswer, question);
+            answersDto.add(answerDto);
+        }
+
+        return answersDto;
+    }
 
 }
