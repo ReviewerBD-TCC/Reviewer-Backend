@@ -47,5 +47,10 @@ public class QuestionAnswerController {
     public ResponseEntity<List<QuestionAnswerResponseDto>> findByUserId(@PathVariable(name = "id")Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.findByUserId(id));
     }
+    @GetMapping("/question/{id}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<QuestionAnswerResponseDto>> findByQuestionId(@PathVariable(name = "id")Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAllByQuestionId(id));
+    }
 
 }
