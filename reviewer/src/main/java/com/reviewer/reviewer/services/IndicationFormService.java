@@ -64,7 +64,28 @@ public class IndicationFormService {
             index+=1;
         };
     
-        var email = new EmailRecordDto(null, "Feedback.BDXD-BR@br.bosch.com",indicateds , null, "Disparo de indicações Email!", "Clique no link abaixo para responder o formulário!\nhttp://10.234.84.188/form");
+        InetAddress end = InetAddress.getLocalHost();
+        var ip = end.getHostAddress().toString();
+        String body = """
+                <p>Disparo de indicação referente ao <strong>%s</strong></p>
+                <h3>Clique no link abaixo para responder o formulário!!</h3>
+                <p>http://%s:5173/form</p>
+                <p>Saudações / Best regards,
+                   <br>
+                   <br>
+                   <strong>Bot Feedback</strong>
+                   <br>
+                   <br>
+                   BD/XD-BR Feedback (BD/SWD-FSA1)
+                   <br>
+                   Robert Bosch Limitada | Caixa Postal 954 | CEP 13012-970 | BRASIL | www.bosch.com.br
+                   <br>
+                   Feedback.BDXD-BR@br.bosch.com
+                   </p>
+                
+                """.formatted(user.get().getName(), ip);
+
+        var email = new EmailRecordDto( "Feedback.BDXD-BR@br.bosch.com",indicateds ,  "Disparo de indicações Email!", body);
         emailService.sendMail(email);
 
         IndicationForm lastIndication = indicationUser.get(indicationUser.size() - 1);
