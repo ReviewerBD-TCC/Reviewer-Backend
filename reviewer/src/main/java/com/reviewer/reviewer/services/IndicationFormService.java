@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -29,7 +31,7 @@ public class IndicationFormService {
     @Autowired
     public EmailService emailService;
 
-    public IndicationFormResponseDto create(@Valid IndicationFormDto form){
+    public IndicationFormResponseDto create(@Valid IndicationFormDto form) throws UnknownHostException {
 
         var user = userRepository.findById(form.userIndication());
         List<Indicated> indicatedList = new ArrayList<>();
