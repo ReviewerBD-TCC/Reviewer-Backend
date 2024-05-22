@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, Long> {
     List<QuestionAnswer> findByUserId(Long userId);
+    List<QuestionAnswer> findAllByQuestionId(Long questionId);
 }
