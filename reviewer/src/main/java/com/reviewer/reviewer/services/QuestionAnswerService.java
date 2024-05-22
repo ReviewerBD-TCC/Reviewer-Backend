@@ -81,7 +81,9 @@ public class QuestionAnswerService {
    public List<QuestionAnswerResponseDto> findByUserId(Long id){
 
        var answer = questionAnswerRepository.findByUserId(id);
-
+        if (answer.isEmpty()){
+            throw new NoSuchElementException("Answer from this user not found!");
+        }
        List<QuestionAnswerResponseDto> answersDto = new ArrayList<>();
 
         for (QuestionAnswer questionAnswer : answer) {
@@ -95,7 +97,9 @@ public class QuestionAnswerService {
     public List<QuestionAnswerResponseDto> findAllByQuestionId(Long id){
 
         var answer = questionAnswerRepository.findAllByQuestionId(id);
-
+        if(answer.isEmpty()){
+            throw new NoSuchElementException("This question is not in form!");
+        }
         List<QuestionAnswerResponseDto> answersDto = new ArrayList<>();
 
         for (QuestionAnswer questionAnswer : answer) {
