@@ -6,23 +6,14 @@ import java.util.*;
 
 import javax.swing.text.StyledEditorKit.BoldAction;
 
-import com.reviewer.reviewer.dto.forms.QuestionFormCreateDto;
+import com.reviewer.reviewer.dto.forms.*;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
-import com.reviewer.reviewer.models.QuestionForm;
+import com.reviewer.reviewer.models.*;
+import com.reviewer.reviewer.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import com.reviewer.reviewer.dto.forms.FormUpdateDto;
-import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
-import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
-import com.reviewer.reviewer.models.Form;
-import com.reviewer.reviewer.models.Question;
-import com.reviewer.reviewer.repositories.FormRepository;
-import com.reviewer.reviewer.repositories.QuestionAnswerRepository;
-import com.reviewer.reviewer.repositories.QuestionFormRepository;
-import com.reviewer.reviewer.repositories.QuestionRepository;
 
 @Service
 public class FormService {
@@ -34,12 +25,15 @@ public class FormService {
     private QuestionFormRepository questionFormRepository;
 
     @Autowired
+    private IndicationFormRepository indicationFormRepository;
+
+    @Autowired
     private QuestionRepository questionRepository;
 
     @Autowired
     private QuestionAnswerRepository questionAnswerRepository;
 
-    public QuestionFormResponseDto create(QuestionFormCreateDto data) {
+    public QuestionFormListDto create(QuestionFormCreatedDto data) {
 
         var form = new Form();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -53,6 +47,10 @@ public class FormService {
         form.setValidation(form.getYear().plusYears(1));
         formRepository.save(form);
         List<QuestionResponseDto> questions = new ArrayList<>();
+
+        List<IndicationForm> indication = indicationFormRepository.findByUserIndicationId(data.indication());
+
+        var listIndication = new IndicationFormResponseDto(indication);
 
         for (int i = 0; i < data.questions().size(); i++) {
             long eachQuestionId = data.questions().get(i).question();
@@ -75,7 +73,7 @@ public class FormService {
             var questionDto = new QuestionResponseDto(questionById.get());
             questions.add(questionDto);
         }
-        return new QuestionFormResponseDto(form.getId(), form.getTitle(), form.getYear(), questions);
+        return new QuestionFormListDto(form.getId(), Collections.singletonList(listIndication), form.getTitle(), form.getYear(), questions);
 
     }
 
@@ -107,6 +105,8 @@ public class FormService {
         List<QuestionFormResponseDto> formsDto = new ArrayList<>();
 
         for (QuestionForm form : forms) {
+
+            System.out.println(form.getIndication());
 
             boolean exists = formsDto.stream().anyMatch(dto -> dto.id().equals(form.getForm().getId()));
             if (!exists) {
