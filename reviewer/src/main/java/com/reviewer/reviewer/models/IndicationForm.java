@@ -3,6 +3,8 @@ package com.reviewer.reviewer.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity(name = "indication_form")
 @Table(name = "indication_forms")
 @Getter
@@ -22,6 +24,9 @@ public class IndicationForm {
     @ManyToOne
     @JoinColumn(name = "indicated_id")
     private Indicated indicated;
+
+    @OneToMany(mappedBy = "indication", cascade = CascadeType.ALL)
+    private List<QuestionForm> questionForm;
 
 
 
