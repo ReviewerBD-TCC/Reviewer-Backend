@@ -1,6 +1,6 @@
 package com.reviewer.reviewer.controllers;
 
-
+import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerDto;
 import com.reviewer.reviewer.dto.questions.QuestionAnswerResponseDto;
 import com.reviewer.reviewer.services.QuestionAnswerService;
@@ -14,13 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @SecurityRequirement(name = "bearer-key")
@@ -47,10 +41,11 @@ public class QuestionAnswerController {
     public ResponseEntity<List<QuestionAnswerResponseDto>> findByUserId(@PathVariable(name = "id")Long id){
         return ResponseEntity.status(HttpStatus.OK).body(service.findByUserId(id));
     }
-    @GetMapping("/question/{id}")
+    @GetMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<QuestionAnswerResponseDto>> findByQuestionId(@PathVariable(name = "id")Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAllByQuestionId(id));
+    public ResponseEntity<List<QuestionAnswerResponseDto>> findByQuestionId(@RequestParam(name = "userId")Long userId, @RequestParam(name = "questionId")Long questionId){
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAllByQuestionId(userId, questionId));
     }
+
 
 }
