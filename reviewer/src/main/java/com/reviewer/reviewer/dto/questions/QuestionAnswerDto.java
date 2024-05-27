@@ -10,6 +10,7 @@ public record QuestionAnswerDto (
 
         @NotNull
         Long userId,
+        @NotNull Long forWhichUser,
 
         List<QuestionAndAnswerDto> questionAnswer
 

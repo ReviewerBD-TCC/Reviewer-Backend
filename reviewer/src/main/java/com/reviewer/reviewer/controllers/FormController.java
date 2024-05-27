@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reviewer.reviewer.dto.forms.FormUpdateDto;
-import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
-import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
+import com.reviewer.reviewer.dto.forms.QuestionFormCreateDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
 import com.reviewer.reviewer.services.FormService;
 
@@ -37,7 +36,7 @@ public class FormController {
     @PostMapping
     @Transactional
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<QuestionFormListDto> createForm(@RequestBody @Valid QuestionFormCreatedDto data){
+    public ResponseEntity<QuestionFormResponseDto> createForm(@RequestBody @Valid QuestionFormCreateDto data){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
 
     }

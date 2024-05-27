@@ -23,13 +23,17 @@ public class IndicationForm {
     @JoinColumn(name = "indicated_id")
     private Indicated indicated;
 
+    @ManyToOne
+    @JoinColumn(name = "form_id")
+    private Form form;
 
 
 
-    public IndicationForm(User user, Indicated indicateds) {
+    public IndicationForm(User user, Indicated indicateds, Form form) {
 
         this.userIndication = user;
         this.indicated = indicateds;
+        this.form = form;
     }
 
     public IndicationForm(User user) {

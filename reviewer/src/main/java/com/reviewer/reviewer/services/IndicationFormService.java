@@ -1,15 +1,15 @@
 package com.reviewer.reviewer.services;
 import com.reviewer.reviewer.dto.email.EmailRecordDto;
 import com.reviewer.reviewer.dto.forms.*;
-
+import com.reviewer.reviewer.dto.users.RegisterResponseDto;
+import com.reviewer.reviewer.models.Form;
 import com.reviewer.reviewer.models.IndicationForm;
-
 import com.reviewer.reviewer.models.Indicated;
+import com.reviewer.reviewer.models.QuestionForm;
 import com.reviewer.reviewer.repositories.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -29,20 +29,27 @@ public class IndicationFormService {
     private UserRepository userRepository;
 
     @Autowired
+    private QuestionFormRepository questionFormRepository;
+
+    @Autowired
+    private FormRepository formRepository;
+
+    @Autowired
     public EmailService emailService;
 
-    public IndicationFormResponseDto create(@Valid IndicationFormDto form) throws UnknownHostException {
+    public IndicationFormResponseDto create(@Valid IndicationFormDto data) throws UnknownHostException {
 
-        var user = userRepository.findById(form.userIndication());
+        var user = userRepository.findById(data.userIndication());
+        var form = formRepository.findById(data.formId());
         List<Indicated> indicatedList = new ArrayList<>();
         List<IndicationForm> indicationUser = new ArrayList<>();
-
-        for (int i = 0; i < form.indicateds().size(); i++) {
+        if(form.isEmpty()) throw new NoSuchElementException("Form not found!");
+        for (int i = 0; i < data.indicateds().size(); i++) {
             
-            var userIndicated = userRepository.findById(form.indicateds().get(i).userIndicated());
+            var userIndicated = userRepository.findById(data.indicateds().get(i).userIndicated());
             var indicated = new Indicated(userIndicated.get());
             indicatedList.add(indicated);
-            var indication = new IndicationForm(user.get(), indicated);
+            var indication = new IndicationForm(user.get(), indicated, form.get());
 
 
 
@@ -59,9 +66,9 @@ public class IndicationFormService {
 
         List<IndicatedResponseDto> indicatedResponseDtos = IndicatedResponseDto.fromIndicatedList(indicatedList);
         int index = 0;
-        String[] indicateds = new String[form.indicateds().size()];
+        String[] indicateds = new String[data.indicateds().size()];
         for (Indicated indicated : indicatedList) {
-            System.out.println(form.indicateds());
+            System.out.println(data.indicateds());
             indicateds[index] = indicated.getUserIndicated().getEmail();
             index+=1;
         };
@@ -95,6 +102,34 @@ public class IndicationFormService {
 
         return responseDto;
     }
+    public List<QuestionFormListDto> getIndicatedWithForm(Long indicatedId) {
+        var indication = indicationFormRepository.findAll();
+        var indicated = indicatedRepository.findAll();
+        var userLoggedIndicated = userRepository.findById(indicatedId);
+        List<QuestionFormListDto> questionFormResponseDtos = new ArrayList<>();
+        for (int i = 0; i < indicated.size(); i++) {
 
+            if (indication.get(i).getIndicated().getUserIndicated().equals(userLoggedIndicated.get())) {
+                System.out.println("voce foi indicado pelo "+indication.get(i).getUserIndication().getName());
+                System.out.println("voce é esse usuario "+userLoggedIndicated.get().getName());
+                Form form = indication.get(i).getForm();
+                var userIndication = new RegisterResponseDto(indication.get(i).getUserIndication());
+                if (form != null) {
+                    var questionForms = questionFormRepository.findAllByFormId(form.getId());
+                    QuestionFormListDto questionFormDto = null;
+                    for (QuestionForm questionForm : questionForms) {
+                        questionFormDto = new QuestionFormListDto(questionForm, userIndication);
+                    }
+
+                    questionFormResponseDtos.add(questionFormDto);
+
+                }
+            }
+
+        }
+
+        if(questionFormResponseDtos.isEmpty()) throw new NoSuchElementException("Question form not found for that user!");
+        return questionFormResponseDtos;
+    }
 
 }

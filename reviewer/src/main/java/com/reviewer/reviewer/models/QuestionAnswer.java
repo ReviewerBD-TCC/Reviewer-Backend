@@ -27,6 +27,10 @@ public class QuestionAnswer{
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "for_which_user_id")
+    private User forWhichUser;
+
+    @ManyToOne
     @JoinColumn(name = "questionForm_id")
     private QuestionForm questionForm;
 
@@ -36,10 +40,11 @@ public class QuestionAnswer{
 
     private String answer;
 
-    public QuestionAnswer(QuestionAndAnswerDto data, User user, Question question, QuestionForm questionForm) {
+    public QuestionAnswer(QuestionAndAnswerDto data, User user, Question question, QuestionForm questionForm, User forWhichUser) {
         this.user = user;
         this.questionForm = questionForm;
         this.question = question;
         this.answer = data.answer().answer();
+        this.forWhichUser = forWhichUser;
     }
 }

@@ -8,6 +8,7 @@ public record IndicationFormDto(
 
         @NotNull
         Long userIndication,
+        Long formId,
 
         @NotNull
         List<IndicatedDto> indicateds
