@@ -3,9 +3,6 @@ package com.reviewer.reviewer.services;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import com.reviewer.reviewer.dto.forms.*;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.models.*;
@@ -33,7 +30,7 @@ public class FormService {
     @Autowired
     private QuestionAnswerRepository questionAnswerRepository;
 
-    public QuestionFormListDto create(QuestionFormCreatedDto data) {
+    public QuestionFormResponseDto create(QuestionFormCreateDto data) {
 
         var form = new Form();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -47,10 +44,6 @@ public class FormService {
         form.setValidation(form.getYear().plusYears(1));
         formRepository.save(form);
         List<QuestionResponseDto> questions = new ArrayList<>();
-
-        List<IndicationForm> indication = indicationFormRepository.findByUserIndicationId(data.indication());
-
-        var listIndication = new IndicationFormResponseDto(indication);
 
         for (int i = 0; i < data.questions().size(); i++) {
             long eachQuestionId = data.questions().get(i).question();
@@ -73,7 +66,7 @@ public class FormService {
             var questionDto = new QuestionResponseDto(questionById.get());
             questions.add(questionDto);
         }
-        return new QuestionFormListDto(form.getId(), Collections.singletonList(listIndication), form.getTitle(), form.getYear(), questions);
+        return new QuestionFormResponseDto(form.getId(), form.getTitle(), form.getYear(), questions);
 
     }
 
