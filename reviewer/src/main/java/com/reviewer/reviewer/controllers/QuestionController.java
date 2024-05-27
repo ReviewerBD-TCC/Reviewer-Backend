@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +52,8 @@ public class QuestionController {
     
     @GetMapping
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<List<QuestionResponseDto>> findAll(){
+    public ResponseEntity<List<QuestionResponseDto>> findAll(@AuthenticationPrincipal Jwt tokenJWT){
+        System.out.println(tokenJWT.getClaimAsString("roles"));
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
     
