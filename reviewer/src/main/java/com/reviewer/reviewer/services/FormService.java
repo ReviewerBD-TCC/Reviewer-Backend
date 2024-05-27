@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.swing.text.StyledEditorKit.BoldAction;
 
+import com.reviewer.reviewer.dto.forms.QuestionFormCreateDto;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
 import com.reviewer.reviewer.models.QuestionForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.reviewer.reviewer.dto.forms.FormUpdateDto;
-import com.reviewer.reviewer.dto.forms.QuestionFormCreatedDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
 import com.reviewer.reviewer.dto.forms.QuestionFormResponseDto;
 import com.reviewer.reviewer.models.Form;
@@ -39,7 +39,7 @@ public class FormService {
     @Autowired
     private QuestionAnswerRepository questionAnswerRepository;
 
-    public QuestionFormListDto create(QuestionFormCreatedDto data) {
+    public QuestionFormResponseDto create(QuestionFormCreateDto data) {
 
         var form = new Form();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -75,7 +75,7 @@ public class FormService {
             var questionDto = new QuestionResponseDto(questionById.get());
             questions.add(questionDto);
         }
-        return new QuestionFormListDto(form.getId(), form.getTitle(), form.getYear(), questions);
+        return new QuestionFormResponseDto(form.getId(), form.getTitle(), form.getYear(), questions);
 
     }
 
