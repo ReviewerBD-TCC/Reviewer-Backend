@@ -36,7 +36,8 @@ public class QuestionAnswerService {
 
         var questionForms = validation.QuestionFormNotFound(questionFormRepository);
         var user = validation.UserNotFound(userRepository);
-
+        var forWhichUser = userRepository.findById(data.forWhichUser());
+        if(forWhichUser.isEmpty()) throw new NoSuchElementException("To sent your answer its necessary, give the which user id correct!");
         List<QuestionAnswer> answerResponseDtos = new ArrayList<>();
 
         if (data.questionAnswer() == null || data.questionAnswer().isEmpty()) {
@@ -58,7 +59,7 @@ public class QuestionAnswerService {
                 throw new NoSuchElementException("QuestionForm not found for question: " + questionId);
             }
 
-            var questionAnswer = new QuestionAnswer(item, user, question, questionFormPrin.get(0));
+            var questionAnswer = new QuestionAnswer(item, user, question, questionFormPrin.get(0), forWhichUser.get());
             questionAnswer.setAnswer(answerText);
 
             answerResponseDtos.add(questionAnswer);
@@ -80,7 +81,7 @@ public class QuestionAnswerService {
 
    public List<QuestionAnswerResponseDto> findByUserId(Long id){
 
-       var answer = questionAnswerRepository.findByUserId(id);
+       var answer = questionAnswerRepository.findAllByForWhichUserId(id);
         if (answer.isEmpty()){
             throw new NoSuchElementException("Answer from this user not found!");
         }
@@ -94,20 +95,22 @@ public class QuestionAnswerService {
 
         return answersDto;
    }
-    public List<QuestionAnswerResponseDto> findAllByQuestionId(Long id){
-
-        var answer = questionAnswerRepository.findAllByQuestionId(id);
+    public List<QuestionAnswerResponseDto> findAllByQuestionId(Long userId, Long questionId){
+        var user = userRepository.findById(userId);
+        var answer = questionAnswerRepository.findAllByQuestionId(questionId);
         if(answer.isEmpty()){
             throw new NoSuchElementException("This question is not in form!");
         }
         List<QuestionAnswerResponseDto> answersDto = new ArrayList<>();
 
         for (QuestionAnswer questionAnswer : answer) {
-            var question = new QuestionResponseDto(questionAnswer.getQuestion());
-            var answerDto = new QuestionAnswerResponseDto(questionAnswer, question);
-            answersDto.add(answerDto);
+            if(questionAnswer.getForWhichUser().equals(user.get())) {
+                var question = new QuestionResponseDto(questionAnswer.getQuestion());
+                var answerDto = new QuestionAnswerResponseDto(questionAnswer, question);
+                answersDto.add(answerDto);
+            }
         }
-
+        if(answersDto.isEmpty()) throw new NoSuchElementException("User not answered the form ");
         return answersDto;
     }
 
