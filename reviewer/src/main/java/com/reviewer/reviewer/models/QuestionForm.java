@@ -32,6 +32,10 @@ public class QuestionForm{
     @OneToMany(mappedBy = "questionForm", cascade = CascadeType.ALL)
     private List<QuestionAnswer> questionAnswer;
 
+    @ManyToOne
+    @JoinColumn(name = "indication")
+    private IndicationForm indication;
+
     public QuestionForm(Form form, Question question) {
         this.form = form;
         this.question = question;
