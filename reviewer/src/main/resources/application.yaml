@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/reviewer_api
     username: root
-    password: root
+
   main:
     allow-circular-references: true
 
@@ -12,10 +12,11 @@ spring:
 
     hibernate:
       ddl-auto: update
+
   mail:
     host: rb-smtp-auth.rbesz01.com
     port: 25
-    username:  bxfrca@bosch.com
+    username: bxfrca@bosch.com
     password: ${EMAIL_PASSWORD}
     properties:
       mail:
@@ -24,7 +25,26 @@ spring:
             trust: rb-smtp-auth.rbesz01.com
           auth: true
           starttls:
-            enable: true       
+            enable: true
+
+
+security:
+  oauth2:
+    client:
+      provider:
+        azure-ad:
+          authorization-uri: ${AUTHORIZATION_URI}
+          token-uri: ${TOKEN_URI}
+          jwk-set-uri: ${JWK_SET_URI}
+
+      registration:
+        azure-client:
+          provider: azure-ad
+          client-id: ${CLIENT_ID}
+          client-secret: ${CLIENT_SECRET}
+          authorization-grant-type: authorization_code
+          redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+          scope: openid
 
 server:
   port: 8056
