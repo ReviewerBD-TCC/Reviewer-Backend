@@ -24,20 +24,20 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public List<UserResponseDto> findAll(){
-        var users = repository.findAll();
-        List<UserResponseDto> userDto = new ArrayList<>();
-        for (User user : users) {
-            var userResponse = new UserResponseDto(user);
-            userDto.add(userResponse);
-        }
+//    public List<UserResponseDto> findAll(){
+//        var users = repository.findAll();
+//        List<UserResponseDto> userDto = new ArrayList<>();
+//        for (User user : users) {
+//            var userResponse = new UserResponseDto(user);
+//            userDto.add(userResponse);
+//        }
+//
+//        return userDto;
+//    }
 
-        return userDto;
-    }
-
-    public UserResponseDto findMe(Principal principal) {
-        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
-        return new UserResponseDto(user);
-    }
+//    public UserResponseDto findMe(Principal principal) {
+//        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+//        return new UserResponseDto(user);
+//    }
 
 }
