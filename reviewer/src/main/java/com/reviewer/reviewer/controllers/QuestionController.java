@@ -4,10 +4,10 @@ package com.reviewer.reviewer.controllers;
 import java.util.List;
 
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
+import com.reviewer.reviewer.infra.functionsConfig.CompareRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,34 +37,48 @@ public class QuestionController {
     @Autowired
     private QuestionService service;
 
+    @Autowired
+    private CompareRoles roles;
+
+
     @PostMapping
     @Transactional
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<QuestionResponseDto> create(@RequestBody @Valid QuestionDto data){
+    public ResponseEntity<QuestionResponseDto> create(@RequestBody @Valid QuestionDto data, @AuthenticationPrincipal Jwt tokenJWT){
+        if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
     }
 
    @GetMapping("/{id}")
-   @Secured("ROLE_ADMIN")
-    public ResponseEntity<QuestionResponseDto> findById(@PathVariable(name = "id") Long id){
+    public ResponseEntity<QuestionResponseDto> findById(@PathVariable(name = "id") Long id, @AuthenticationPrincipal Jwt tokenJWT){
+       if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
+           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+       }
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
     
     @GetMapping
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<QuestionResponseDto>> findAll(@AuthenticationPrincipal Jwt tokenJWT){
-        System.out.println(tokenJWT.getClaimAsString("roles"));
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
+        if (roles.compareRoles(tokenJWT).equals("ROLE_ADMIN") || roles.compareRoles(tokenJWT).equals("ROLE_BDUSERSWD")){
+            return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
     }
     
     @PutMapping("/{id}")
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<QuestionResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionDto data){
+    public ResponseEntity<QuestionResponseDto> update(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionDto data, @AuthenticationPrincipal Jwt tokenJWT){
+        if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(id, data));
     }
     @PatchMapping("/{id}")
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<QuestionResponseDto> partialUpdate(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionActiveDto data){
+    public ResponseEntity<QuestionResponseDto> partialUpdate(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionActiveDto data, @AuthenticationPrincipal Jwt tokenJWT){
+        if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.partialUpdate(id, data));
     }
 
