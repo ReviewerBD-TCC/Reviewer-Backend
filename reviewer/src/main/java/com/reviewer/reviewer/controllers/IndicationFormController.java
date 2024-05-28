@@ -1,6 +1,9 @@
 package com.reviewer.reviewer.controllers;
-import com.reviewer.reviewer.dto.forms.*;
-import com.reviewer.reviewer.models.IndicationForm;
+
+import com.reviewer.reviewer.dto.forms.IndicationFormDto;
+import com.reviewer.reviewer.dto.forms.IndicationFormResponseDto;
+import com.reviewer.reviewer.dto.forms.QuestionFormListDto;
+import com.reviewer.reviewer.infra.functionsConfig.CompareRoles;
 import com.reviewer.reviewer.repositories.UserRepository;
 import com.reviewer.reviewer.services.IndicationFormService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -9,16 +12,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -35,24 +32,22 @@ public class IndicationFormController {
 
     @Resource
     private IndicationFormService indicationFormService;
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+
+    @Autowired
+    private CompareRoles roles;
+
     @PostMapping
     @Transactional
-   
-    public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, UriComponentsBuilder uriBuilder) throws UnknownHostException {
-
-        var userIndication = userRepository.findById(data.userIndication());
-        var indicationForm = new IndicationForm(userIndication.get());
-
-        var uri = uriBuilder.path("/indication_form/{id}").buildAndExpand(indicationForm.getId()).toUri();
-
-
-        return ResponseEntity.created(uri).body(indicationFormService.create(data));
+    public ResponseEntity<IndicationFormResponseDto> create(@RequestBody @Valid IndicationFormDto data, @AuthenticationPrincipal Jwt tokenJWT) throws UnknownHostException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(indicationFormService.create(data));
     }
     
     @GetMapping("/user/{id}")
     @Transactional
-    public ResponseEntity<List<QuestionFormListDto>> getFormByIndicated(@PathVariable(name = "id")Long id){
+    public ResponseEntity<List<QuestionFormListDto>> getFormByIndicated(@PathVariable(name = "id") Long id, @AuthenticationPrincipal Jwt tokenJWT){
+        if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(indicationFormService.getIndicatedWithForm(id));
 
     }
