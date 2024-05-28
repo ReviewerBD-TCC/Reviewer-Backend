@@ -9,7 +9,6 @@ import com.reviewer.reviewer.repositories.UserRepository;
 
 public record Validation (QuestionAnswerDto data){
 
-
     public User UserNotFound(UserRepository repository){
         var user = repository.findById(data.userId());
         return user.get();
