@@ -94,6 +94,21 @@
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
 
+		<dependency>
+			<!-- Include the sdk as a dependency -->
+			<groupId>com.microsoft.graph</groupId>
+			<artifactId>microsoft-graph</artifactId>
+			<!--x-release-please-start-version-->
+			<version>6.11.0</version>
+			<!--x-release-please-end-->
+		</dependency>
+		<dependency>
+			<!-- This dependency is only needed if you are using a TokenCredential object for authentication -->
+			<groupId>com.azure</groupId>
+			<artifactId>azure-identity</artifactId>
+			<version>1.11.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
