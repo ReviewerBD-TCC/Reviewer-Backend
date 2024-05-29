@@ -10,8 +10,6 @@ public record QuestionFormCreateDto(
 
         String title,
 
-        Long indication,
-
         @NotNull
         List<QuestionIdDto> questions,
 
