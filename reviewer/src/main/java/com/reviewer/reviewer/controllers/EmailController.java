@@ -30,7 +30,7 @@ public class EmailController {
 		if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		service.sendMail(data);
+		service.sendMail(data, tokenJWT);
 		return ResponseEntity.status(HttpStatus.CREATED).body("Email sent successfully!");
 	}
 }
