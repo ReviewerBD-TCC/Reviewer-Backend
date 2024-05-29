@@ -9,11 +9,11 @@ import java.util.List;
 
 public record IndicationFormResponseDto(
         Long id,
-        Long userIndication,
+        String userIndication,
         List<IndicatedResponseDto> indicateds
 ) {
 
-    public IndicationFormResponseDto(IndicationForm lastIndication, User user, List<IndicatedResponseDto> indicatedResponseDto) {
+    public IndicationFormResponseDto(IndicationForm lastIndication, List<IndicatedResponseDto> indicatedResponseDto) {
         this(lastIndication.getId(), lastIndication.getUserIndication().getId(), indicatedResponseDto);
     }
     public IndicationFormResponseDto(List<IndicationForm> indications) {
