@@ -55,7 +55,7 @@ public class QuestionController {
        if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
        }
-        return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(service.findById(id, tokenJWT));
     }
     
     @GetMapping
@@ -72,14 +72,14 @@ public class QuestionController {
         if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(id, data));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(id, data, tokenJWT));
     }
     @PatchMapping("/{id}")
     public ResponseEntity<QuestionResponseDto> partialUpdate(@PathVariable(name = "id") Long id, @RequestBody @Valid QuestionActiveDto data, @AuthenticationPrincipal Jwt tokenJWT){
         if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.partialUpdate(id, data));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.partialUpdate(id, data, tokenJWT));
     }
 
 
