@@ -5,10 +5,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import com.reviewer.reviewer.dto.forms.*;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
+import com.reviewer.reviewer.dto.users.UserResponseDto;
 import com.reviewer.reviewer.models.*;
 import com.reviewer.reviewer.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,8 +32,11 @@ public class FormService {
     @Autowired
     private QuestionAnswerRepository questionAnswerRepository;
 
-    public QuestionFormResponseDto create(QuestionFormCreateDto data) {
+    @Autowired
+    private UserService userService;
 
+    public QuestionFormResponseDto create(QuestionFormCreateDto data, Jwt jwtUser) {
+        userService.isInDatabase(new UserResponseDto(jwtUser));
         var form = new Form();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         var today = LocalDate.now();
@@ -70,7 +75,8 @@ public class FormService {
 
     }
 
-    public List<QuestionFormResponseDto> listFormQuestion(Long formId) {
+    public List<QuestionFormResponseDto> listFormQuestion(Long formId, Jwt jwtUser ) {
+        userService.isInDatabase(new UserResponseDto(jwtUser));
         var formQuestions = questionFormRepository.findAllByFormId(formId);
 
         if (formQuestions.isEmpty()) {
@@ -93,7 +99,8 @@ public class FormService {
         return questionFormResponseDtos; // Retorna a lista de DTOs
     }
 
-    public List<QuestionFormResponseDto> findAll() {
+    public List<QuestionFormResponseDto> findAll(Jwt jwtUser) {
+        userService.isInDatabase(new UserResponseDto(jwtUser));
         var forms = questionFormRepository.findAll();
         List<QuestionFormResponseDto> formsDto = new ArrayList<>();
 
@@ -110,7 +117,8 @@ public class FormService {
         return formsDto;
     }
 
-    public <T> Object updateForm(Long id, FormUpdateDto data) {
+    public <T> Object updateForm(Long id, FormUpdateDto data,Jwt jwtUser) {
+        userService.isInDatabase(new UserResponseDto(jwtUser));
         var form = formRepository.findById(id);
         var questionForms = questionFormRepository.findAllByFormId(id);
         if (form.isEmpty()) {
