@@ -23,7 +23,7 @@ public class QuestionAnswer{
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "who_answered_id")
     private User user;
 
     @ManyToOne
