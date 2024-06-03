@@ -32,7 +32,8 @@ public class IndicationFormService {
 
     @Autowired
     private QuestionFormRepository questionFormRepository;
-
+    @Autowired
+    private QuestionAnswerRepository questionAnswerRepository;
     @Autowired
     private FormRepository formRepository;
 
@@ -42,6 +43,11 @@ public class IndicationFormService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private DashboardService dashboardService;
+    @Autowired
+    private DashboardRepository dashboardRepository;
+
     public IndicationFormResponseDto create(@Valid IndicationFormDto data, Jwt jwtUser) throws UnknownHostException {
 
         var user = userService.isInDatabase(new UserResponseDto(jwtUser));;
@@ -49,6 +55,7 @@ public class IndicationFormService {
         List<Indicated> indicatedList = new ArrayList<>();
         List<IndicationForm> indicationUser = new ArrayList<>();
         if(form.isEmpty()) throw new NoSuchElementException("Form not found!");
+        dashboardService.addNewValueFormSent(form.get());
         for (int i = 0; i < data.indicateds().size(); i++) {
             
             var userIndicated = userRepository.findById(data.indicateds().get(i).userIndicated());
@@ -79,7 +86,7 @@ public class IndicationFormService {
         };
     
         InetAddress end = InetAddress.getLocalHost();
-        var ip = end.getHostAddress().toString();
+        var ip = end.getHostAddress();
         String body = """
                 <p>Disparo de indicação referente ao <strong>%s</strong></p>
                 <h3>Clique no link abaixo para responder o formulário!!</h3>
@@ -115,8 +122,6 @@ public class IndicationFormService {
         for (int i = 0; i < indicated.size(); i++) {
 
             if (indication.get(i).getIndicated().getUserIndicated().equals(userLoggedIndicated.get())) {
-                System.out.println("voce foi indicado pelo "+indication.get(i).getUserIndication().getName());
-                System.out.println("voce é esse usuario "+userLoggedIndicated.get().getName());
                 Form form = indication.get(i).getForm();
                 var userIndication = new UserDto(indication.get(i).getUserIndication());
                 if (form != null) {
@@ -134,6 +139,33 @@ public class IndicationFormService {
         }
 
         if(questionFormResponseDtos.isEmpty()) throw new NoSuchElementException("Question form not found for that user!");
+        return questionFormResponseDtos;
+    }
+    public List<QuestionFormListDto> pendingFormToRespond(String userIndicated){
+
+        var indication = indicationFormRepository.findAll();
+        var questionAnswer = questionAnswerRepository.findAllByUserId(userIndicated);
+        List<QuestionFormListDto> questionFormResponseDtos = new ArrayList<>();
+        for (int i = 0; i < indication.size(); i++) {
+
+            if (indication.get(i).getIndicated().getUserIndicated().getId().equals(userIndicated)) {
+                System.out.println(indication.get(i).getIndicated().getUserIndicated().getId().equals(userIndicated));
+                Form form = indication.get(i).getForm();
+                var userIndication = new UserDto(indication.get(i).getUserIndication());
+                if (form != null) {
+                    var questionForms = questionFormRepository.findAllByFormId(form.getId());
+                    QuestionFormListDto questionFormDto = null;
+                    for (QuestionForm questionForm : questionForms) {
+                        questionFormDto = new QuestionFormListDto(questionForm, userIndication);
+                    }
+                    questionFormResponseDtos.add(questionFormDto);
+
+                }
+            }
+
+        }
+        if(questionAnswer.isEmpty()) throw new NoSuchElementException("This user doesnt has pending form! Wait other user indicates you!");
+
         return questionFormResponseDtos;
     }
 
