@@ -24,11 +24,6 @@ public class DashboardService {
     }
     public Dashboard addNewValueFormAnsweredSent(Form form){
         var dashboard = dashboardRepository.findByFormId(form.getId());
-        if(dashboard == null){
-            var newDashboard = new Dashboard(1,0,form);
-            dashboardRepository.save(newDashboard);
-            return newDashboard;
-        }
         dashboard.setQuantityAnsweredFormSent(dashboard.getQuantityAnsweredFormSent() + 1);
         dashboardRepository.save(dashboard);
         return dashboard;
