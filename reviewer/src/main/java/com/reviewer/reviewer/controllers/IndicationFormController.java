@@ -27,9 +27,6 @@ import java.util.List;
 @RequestMapping("api/v1/indication_form")
 public class IndicationFormController {
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Resource
     private IndicationFormService indicationFormService;
 
@@ -49,6 +46,15 @@ public class IndicationFormController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(indicationFormService.getIndicatedWithForm(id));
+
+    }
+    @GetMapping("/pending/{id}")
+    @Transactional
+    public ResponseEntity<List<QuestionFormListDto>> hasPendingForm(@PathVariable(name = "id")String id,@AuthenticationPrincipal Jwt tokenJWT){
+        if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(indicationFormService.pendingFormToRespond(id));
 
     }
     
