@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @SecurityRequirement(name = "bearer-key")
-@CrossOrigin( origins = "*")
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/answer_form")
 public class QuestionAnswerController {
     @Autowired
@@ -64,5 +64,11 @@ public class QuestionAnswerController {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAllByQuestionId(formId, questionId, tokenJWT));
     }
 
-
+    @GetMapping("/user/{id}/")
+    public ResponseEntity<List<QuestionAnswerResponseDto>> findAllAnswersByFormAndUserId(@PathVariable(name = "id")String id,@RequestParam(name = "formId") Long formId, @AuthenticationPrincipal Jwt tokenJWT){
+        if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAllAnswersByFormAndUserId(formId,id, tokenJWT));
+    }
 }
