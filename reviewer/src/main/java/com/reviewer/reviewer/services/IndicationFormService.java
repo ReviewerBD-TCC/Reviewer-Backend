@@ -165,7 +165,7 @@ public class IndicationFormService {
             }
 
         }
-        if(questionAnswer.isEmpty()) throw new NoSuchElementException("This user doesnt has pending form! Wait other user indicates you!");
+        if(questionAnswer.size() == 0 && questionFormResponseDtos.size() == 0) throw new NoSuchElementException("This user doesnt has pending form! Wait other user indicates you!");
 
         return questionFormResponseDtos;
     }
