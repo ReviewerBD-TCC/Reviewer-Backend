@@ -50,7 +50,8 @@ public class IndicationFormService {
 
     public IndicationFormResponseDto create(@Valid IndicationFormDto data, Jwt jwtUser) throws UnknownHostException {
 
-        var user = userService.isInDatabase(new UserResponseDto(jwtUser));;
+        userService.isInDatabase(new UserResponseDto(jwtUser));
+        var user = userRepository.findById(data.userIndication());
         var form = formRepository.findById(data.formId());
         List<Indicated> indicatedList = new ArrayList<>();
         List<IndicationForm> indicationUser = new ArrayList<>();
@@ -61,11 +62,11 @@ public class IndicationFormService {
             var userIndicated = userRepository.findById(data.indicateds().get(i).userIndicated());
             var indicated = new Indicated(userIndicated.get());
             indicatedList.add(indicated);
-            var indication = new IndicationForm(user, indicated, form.get());
+            var indication = new IndicationForm(user.get(), indicated, form.get());
 
 
 
-            if(user.getId().equals(indicatedList.get(i).getUserIndicated().getId()) && indicatedList.get(i).getUserIndicated().getEmail().equals(userIndicated.get().getEmail())){
+            if(user.get().getId().equals(indicatedList.get(i).getUserIndicated().getId()) && indicatedList.get(i).getUserIndicated().getEmail().equals(userIndicated.get().getEmail())){
                 throw new NoSuchElementException("You repeated a user id in your indications! ");
             }
             else {
@@ -104,7 +105,7 @@ public class IndicationFormService {
                    Feedback.BDXD-BR@br.bosch.com
                    </p>
                 
-                """.formatted(user.getName(), ip);
+                """.formatted(user.get().getName(), ip);
 
         var email = new EmailRecordDto( "Feedback.BDXD-BR@br.bosch.com",indicateds ,  "Disparo de indicações Email!", body);
         emailService.sendMail(email, jwtUser);
