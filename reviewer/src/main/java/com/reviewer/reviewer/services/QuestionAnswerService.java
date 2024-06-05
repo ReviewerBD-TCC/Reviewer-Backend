@@ -43,7 +43,8 @@ public class QuestionAnswerService {
 
     public List<QuestionAnswerResponseDto> create(QuestionAnswerDto data, Jwt jwtUser) {
         Validation validation = new Validation(data);
-
+        var alreadyRespondThisFormForWhichUser = questionAnswerRepository.findByUserIdAndForWhichUserId(data.whoAnsweredId(),data.forWhichUser());
+        if(alreadyRespondThisFormForWhichUser.size() > 0) throw new IllegalArgumentException("This form already responded, please, wait when you receive a new form to give answer!");
         var questionForms = validation.QuestionFormNotFound(questionFormRepository);
         var user = userService.isInDatabase(new UserResponseDto(jwtUser));
         var forWhichUser = userRepository.findById(data.forWhichUser());
