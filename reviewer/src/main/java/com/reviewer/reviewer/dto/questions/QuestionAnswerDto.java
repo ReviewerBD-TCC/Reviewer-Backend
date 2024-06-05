@@ -9,8 +9,8 @@ public record QuestionAnswerDto (
         Long questionFormId,
 
         @NotNull
-        Long userId,
-        @NotNull Long forWhichUser,
+        String whoAnsweredId,
+        @NotNull String forWhichUser,
 
         List<QuestionAndAnswerDto> questionAnswer
 

@@ -3,7 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import com.reviewer.reviewer.dto.questions.QuestionResponseDto;
+import com.reviewer.reviewer.dto.users.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.reviewer.reviewer.dto.questions.QuestionActiveDto;
@@ -16,6 +18,8 @@ public class QuestionService {
 
     @Autowired
     private QuestionRepository repository;
+    @Autowired
+    private UserService userService;
 
     public QuestionResponseDto create(QuestionDto data){
 
@@ -26,7 +30,8 @@ public class QuestionService {
         return new QuestionResponseDto(question);
     }
 
-    public QuestionResponseDto update(Long id, QuestionDto data){
+    public QuestionResponseDto update(Long id, QuestionDto data, Jwt jwtUser){
+        userService.isInDatabase(new UserResponseDto(jwtUser));
         var question = repository.findById(id);
         if(question.isEmpty()) throw new NoSuchElementException("Id question: " + id + " not found");
         var entityQuestion = question.get();
@@ -38,7 +43,8 @@ public class QuestionService {
         return new QuestionResponseDto(question.get().getId(),  question.get().getQuestionPt(), question.get().getQuestionEn(), question.get().getActive());
 
     }
-    public QuestionResponseDto partialUpdate(Long id, QuestionActiveDto data){
+    public QuestionResponseDto partialUpdate(Long id, QuestionActiveDto data,Jwt jwtUser){
+        userService.isInDatabase(new UserResponseDto(jwtUser));
         var question = repository.findById(id);
         if(question.isEmpty()) throw new NoSuchElementException("Id question: " + id + " not found");
         question.get().setActive(data.active());
@@ -46,7 +52,8 @@ public class QuestionService {
         return new QuestionResponseDto(question.get());
     }
     
-    public QuestionResponseDto findById(Long id){
+    public QuestionResponseDto findById(Long id, Jwt jwtUser){
+        userService.isInDatabase(new UserResponseDto(jwtUser));
         var question = repository.findById(id);
 
         if (question.isEmpty()) {

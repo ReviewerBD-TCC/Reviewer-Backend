@@ -7,7 +7,7 @@ import java.util.List;
 public record IndicationFormDto(
 
         @NotNull
-        Long userIndication,
+        String userIndication,
         Long formId,
 
         @NotNull

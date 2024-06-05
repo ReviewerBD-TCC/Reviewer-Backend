@@ -35,7 +35,7 @@ public class FormController {
         if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(data, tokenJWT));
 
     }
     @GetMapping("/{formId}")
@@ -43,7 +43,7 @@ public class FormController {
         if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(service.listFormQuestion(formId));
+        return ResponseEntity.status(HttpStatus.OK).body(service.listFormQuestion(formId, tokenJWT));
 
     }
     @GetMapping
@@ -51,7 +51,7 @@ public class FormController {
         if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAll(tokenJWT));
 
     }
     @DeleteMapping("/{formId}")
@@ -68,7 +68,7 @@ public class FormController {
         if (!roles.compareRoles(tokenJWT).equals("ROLE_ADMIN")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        service.updateForm(formId, data);
+        service.updateForm(formId, data, tokenJWT);
         return ResponseEntity.status(HttpStatus.CREATED).body("Form edited successfully!");
 
     }

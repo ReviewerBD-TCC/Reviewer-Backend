@@ -1,12 +1,14 @@
 package com.reviewer.reviewer.services;
 
 
+import com.reviewer.reviewer.dto.users.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.reviewer.reviewer.dto.email.EmailRecordDto;
@@ -23,13 +25,15 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-
+	@Autowired
+	private UserService userService;
 	private ExecutorService executorService = Executors.newCachedThreadPool();
 
 	@Value("${spring.mail.username}")
 	private String sender;
 
-	public void sendMail(EmailRecordDto data){
+	public void sendMail(EmailRecordDto data, Jwt jwtUser){
+		userService.isInDatabase(new UserResponseDto(jwtUser));
 		CompletableFuture<Void> future = sendMailAsync(data);
 		future.thenRun(()-> System.out.println("Email enviado!")).exceptionally(ex->{
 			System.out.println("Ocorreu um erro ao enviar o email"+ ex.getMessage());
