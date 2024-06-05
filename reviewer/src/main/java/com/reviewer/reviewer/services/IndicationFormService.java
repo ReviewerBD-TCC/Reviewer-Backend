@@ -150,7 +150,6 @@ public class IndicationFormService {
         for (int i = 0; i < indication.size(); i++) {
 
             if (indication.get(i).getIndicated().getUserIndicated().getId().equals(userIndicated)) {
-                System.out.println(indication.get(i).getIndicated().getUserIndicated().getId().equals(userIndicated));
                 Form form = indication.get(i).getForm();
                 var userIndication = new UserDto(indication.get(i).getUserIndication());
                 if (form != null) {
@@ -160,13 +159,10 @@ public class IndicationFormService {
                         questionFormDto = new QuestionFormListDto(questionForm, userIndication);
                     }
                     questionFormResponseDtos.add(questionFormDto);
-
                 }
             }
-
         }
-        if(questionAnswer.size() == 0 && questionFormResponseDtos.size() == 0) throw new NoSuchElementException("This user doesnt has pending form! Wait other user indicates you!");
-
+        if(questionAnswer.size() > 0) throw new NoSuchElementException("This user doesnt has pending form! Wait other user indicates you!");
         return questionFormResponseDtos;
     }
 
