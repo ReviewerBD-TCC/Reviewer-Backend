@@ -7,7 +7,6 @@ import com.reviewer.reviewer.dto.users.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-
 import com.reviewer.reviewer.dto.questions.QuestionActiveDto;
 import com.reviewer.reviewer.dto.questions.QuestionDto;
 import com.reviewer.reviewer.models.Question;
@@ -31,7 +30,7 @@ public class QuestionService {
     }
 
     public QuestionResponseDto update(Long id, QuestionDto data, Jwt jwtUser){
-        userService.isInDatabase(new UserResponseDto(jwtUser));
+
         var question = repository.findById(id);
         if(question.isEmpty()) throw new NoSuchElementException("Id question: " + id + " not found");
         var entityQuestion = question.get();
@@ -44,7 +43,7 @@ public class QuestionService {
 
     }
     public QuestionResponseDto partialUpdate(Long id, QuestionActiveDto data,Jwt jwtUser){
-        userService.isInDatabase(new UserResponseDto(jwtUser));
+
         var question = repository.findById(id);
         if(question.isEmpty()) throw new NoSuchElementException("Id question: " + id + " not found");
         question.get().setActive(data.active());
@@ -53,7 +52,7 @@ public class QuestionService {
     }
     
     public QuestionResponseDto findById(Long id, Jwt jwtUser){
-        userService.isInDatabase(new UserResponseDto(jwtUser));
+
         var question = repository.findById(id);
 
         if (question.isEmpty()) {
