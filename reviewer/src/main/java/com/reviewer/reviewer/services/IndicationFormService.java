@@ -50,21 +50,27 @@ public class IndicationFormService {
 
     public IndicationFormResponseDto create(@Valid IndicationFormDto data, Jwt jwtUser) throws UnknownHostException {
 
-        userService.isInDatabase(new UserResponseDto(jwtUser));
+
         var user = userRepository.findById(data.userIndication());
         var form = formRepository.findById(data.formId());
         List<Indicated> indicatedList = new ArrayList<>();
         List<IndicationForm> indicationUser = new ArrayList<>();
         if(form.isEmpty()) throw new NoSuchElementException("Form not found!");
+        List<String> indicatedIds = data.indicateds().stream()
+                .map(IndicatedDto::userIndicated).toList();
+        List<Object> existingIndications = indicationFormRepository.findByFormAndUserAndIndicatedUsers(
+                form.get().getId(), user.get().getId(), indicatedIds);
+
+        if (!existingIndications.isEmpty()) {
+            throw new NoSuchElementException("Indication already exists!");
+        }
         dashboardService.addNewValueFormSent(form.get());
         for (int i = 0; i < data.indicateds().size(); i++) {
             
             var userIndicated = userRepository.findById(data.indicateds().get(i).userIndicated());
             var indicated = new Indicated(userIndicated.get());
             indicatedList.add(indicated);
-            var indication = new IndicationForm(user.get(), indicated, form.get());
-
-
+            var indication = new IndicationForm(user.get(), indicated, form.get(), false);
 
             if(user.get().getId().equals(indicatedList.get(i).getUserIndicated().getId()) && indicatedList.get(i).getUserIndicated().getEmail().equals(userIndicated.get().getEmail())){
                 throw new NoSuchElementException("You repeated a user id in your indications! ");
@@ -142,28 +148,33 @@ public class IndicationFormService {
         if(questionFormResponseDtos.isEmpty()) throw new NoSuchElementException("Question form not found for that user!");
         return questionFormResponseDtos;
     }
-    public List<QuestionFormListDto> pendingFormToRespond(String userIndicated){
+    public List<QuestionFormListDto> pendingFormToRespond(String userIndicated) {
 
         var indication = indicationFormRepository.findAll();
-        var questionAnswer = questionAnswerRepository.findAllByUserId(userIndicated);
         List<QuestionFormListDto> questionFormResponseDtos = new ArrayList<>();
-        for (int i = 0; i < indication.size(); i++) {
 
-            if (indication.get(i).getIndicated().getUserIndicated().getId().equals(userIndicated)) {
-                Form form = indication.get(i).getForm();
-                var userIndication = new UserDto(indication.get(i).getUserIndication());
+        for (var ind : indication) {
+            if (ind.getIndicated().getUserIndicated().getId().equals(userIndicated) && (ind.getIsAnswered().equals(false))) {
+                Form form = ind.getForm();
+                var userIndication = new UserDto(ind.getUserIndication());
+
                 if (form != null) {
                     var questionForms = questionFormRepository.findAllByFormId(form.getId());
                     QuestionFormListDto questionFormDto = null;
                     for (QuestionForm questionForm : questionForms) {
-                        questionFormDto = new QuestionFormListDto(questionForm, userIndication);
+                         questionFormDto = new QuestionFormListDto(questionForm, userIndication);
+
                     }
                     questionFormResponseDtos.add(questionFormDto);
                 }
             }
         }
-        if(questionAnswer.size() > 0) throw new NoSuchElementException("This user doesnt has pending form! Wait other user indicates you!");
+
+        if (questionFormResponseDtos.isEmpty()) {
+            throw new NoSuchElementException("This user doesn't have pending forms! Wait for another user to indicate you!");
+        }
         return questionFormResponseDtos;
     }
+
 
 }

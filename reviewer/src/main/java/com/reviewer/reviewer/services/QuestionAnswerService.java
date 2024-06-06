@@ -8,7 +8,6 @@ import com.reviewer.reviewer.models.QuestionAnswer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import com.reviewer.reviewer.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -40,15 +39,29 @@ public class QuestionAnswerService {
     private QuestionRepository questionRepository;
     @Autowired
     private DashboardService dashboardService;
+    @Autowired
+    private IndicationFormRepository indicationFormRepository;
+    @Autowired
+    private IndicatedRepository indicatedRepository;
 
     public List<QuestionAnswerResponseDto> create(QuestionAnswerDto data, Jwt jwtUser) {
+
         Validation validation = new Validation(data);
-        var alreadyRespondThisFormForWhichUser = questionAnswerRepository.findByUserIdAndForWhichUserId(data.whoAnsweredId(),data.forWhichUser());
-        if(alreadyRespondThisFormForWhichUser.size() > 0) throw new IllegalArgumentException("This form already responded, please, wait when you receive a new form to give answer!");
-        var questionForms = validation.QuestionFormNotFound(questionFormRepository);
-        var user = userService.isInDatabase(new UserResponseDto(jwtUser));
+
         var forWhichUser = userRepository.findById(data.forWhichUser());
         if(forWhichUser.isEmpty()) throw new NoSuchElementException("To sent your answer its necessary, give the which user id correct!");
+        var user = userRepository.findById(data.whoAnsweredId()).orElseThrow(()->new NoSuchElementException("User not found!"));
+        var alreadyRespondThisFormForWhichUser = questionAnswerRepository.findByUserIdAndForWhichUserId(user.getId(),forWhichUser.get().getId());
+        if(alreadyRespondThisFormForWhichUser.size() > 0) throw new IllegalArgumentException("This form already responded, please, wait when you receive a new form to give answer!");
+        var indicated = indicatedRepository.findByUserIndicated(user);
+        var hasIndication = indicationFormRepository.findByUserIndicationAndIndicatedId(indicated.getId(),forWhichUser.get().getId());
+
+        if(hasIndication.getIsAnswered() == false) {
+            hasIndication.setIsAnswered(true);
+            indicationFormRepository.save(hasIndication);
+        }
+        var questionForms = validation.QuestionFormNotFound(questionFormRepository);
+
         List<QuestionAnswer> answerResponseDtos = new ArrayList<>();
 
         if (data.questionAnswer() == null || data.questionAnswer().isEmpty()) {
@@ -80,18 +93,9 @@ public class QuestionAnswerService {
         return QuestionAnswerResponseDto.fromQuestionAnswerList(answerResponseDtos, dashboard);
     }
 
-//    public List<QuestionAnswerResponseDto> findAll(){
-//        var answersList = questionAnswerRepository.findAll();
-//        List<QuestionAnswerResponseDto> answersDto = new ArrayList<>();
-//        for (QuestionAnswer questionAnswer : answersList) {
-//            var answerDto = new QuestionAnswerResponseDto(questionAnswer);
-//            answersDto.add(answerDto);
-//        }
-//        return answersDto;
-//    }
 
     public List<QuestionAnswerResponseDto> findAllUsersAnsweredTheForm(Long formId, Jwt jwtUser){
-        userService.isInDatabase(new UserResponseDto(jwtUser));
+
         var form = formRepository.findById(formId).orElseThrow(() -> new NoSuchElementException("Form id not found!"));
         var answer = questionAnswerRepository.findAll();
         if (answer.isEmpty()){
@@ -113,7 +117,7 @@ public class QuestionAnswerService {
         return answersDto;
     }
     public List<QuestionAnswerResponseDto> findAllAnswersByFormAndUserId(Long formId,String userIndicated, Jwt jwtUser){
-        userService.isInDatabase(new UserResponseDto(jwtUser));
+
         var form = formRepository.findById(formId).orElseThrow(() -> new NoSuchElementException("Form id not found!"));
         var dashboard = dashboardRepository.findByFormId(formId);
         var answer = questionAnswerRepository.findAllByForWhichUserId(userIndicated);
@@ -132,7 +136,7 @@ public class QuestionAnswerService {
         return answersDto;
     }
     public List<QuestionAnswerResponseDto> findAllAnswersByUserId(String userId, Jwt jwtUser){
-        userService.isInDatabase(new UserResponseDto(jwtUser));
+
 
         var answer = questionAnswerRepository.findAllByUserId(userId);
         if (answer.isEmpty()){

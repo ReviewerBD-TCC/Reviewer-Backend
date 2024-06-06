@@ -12,7 +12,7 @@ public class CompareRoles {
 
         System.out.println(roles);
 
-        if (roles.contains("User.Read")) {
+        if (roles.contains("ADMIN")) {
             return "ROLE_ADMIN";
         } else if (roles.contains("BDUSERSWD")) {
             return "ROLE_BDUSERSWD";
